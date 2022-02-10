@@ -13,6 +13,5 @@ int main()
     v_insert(&v, 1, 24);
     for (int i = 0; i<v.len; ++i) printf("%d\n", v.data[i]);
     
-
     return 0;
 }
