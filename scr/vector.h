@@ -29,4 +29,3 @@ typedef _vector_t(char*) vector_str_t;
 typedef _vector_t(double) vector_double_t;
 
 #endif
-
