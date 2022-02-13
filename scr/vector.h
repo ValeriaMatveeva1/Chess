@@ -10,7 +10,6 @@
 
 #define _vector_args(v) (char**)(&(v)->data), &(v)->len, &(v)->maxlen, sizeof(*(v)->data)
 
-
 #define v_push(v, val) (_vector_expand(_vector_args(v)) ? -1 :((v)->data[(v)->len++] = (val), 0), 0)
 
 #define v_insert(v, idx, val) (_vector_insert(_vector_args(v), idx) ? -1 :((v)->data[idx] = (val), (v)->len++, 0))
