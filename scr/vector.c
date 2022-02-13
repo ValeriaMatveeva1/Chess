@@ -28,6 +28,3 @@ int _vector_pop(char** data, int *len, int *maxlen, int size, int idx)
     memmove(*data + idx * size, *data + (idx + 1) * size, (*len - idx - 1) * size);
     return 0;
 }
-
-
-
