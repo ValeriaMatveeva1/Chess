@@ -1,0 +1,30 @@
+# depslib dependency file v1.0
+1644953433 source:d:\programming\c++\c\chess\scr\bot_logic.c
+	"bot_logic.h"
+
+1644951232 d:\programming\c++\c\chess\scr\bot_logic.h
+	"chess_engine.h"
+
+1644948723 d:\programming\c++\c\chess\scr\chess_engine.h
+	"vector.h"
+	<stdio.h>
+	<stdlib.h>
+
+1644751264 d:\programming\c++\c\chess\scr\vector.h
+	<stdlib.h>
+	<string.h>
+
+1644948656 source:d:\programming\c++\c\chess\scr\chess_engine.c
+	"chess_engine.h"
+
+1644750988 source:d:\programming\c++\c\chess\scr\vector.c
+	<stdio.h>
+	"vector.h"
+
+1644953658 source:d:\programming\c++\c\chess\scr\main.c
+	"main.h"
+
+1644949707 d:\programming\c++\c\chess\scr\main.h
+	"chess_engine.h"
+	"bot_logic.h"
+

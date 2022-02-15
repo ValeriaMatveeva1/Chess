@@ -31,6 +31,10 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="scr/bot_logic.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="scr/bot_logic.h" />
 		<Unit filename="scr/chess_engine.c">
 			<Option compilerVar="CC" />
 		</Unit>

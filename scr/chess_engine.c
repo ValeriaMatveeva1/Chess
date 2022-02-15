@@ -259,7 +259,6 @@ int loss_q(char cur_board[8][8][2], char color)
 {
     char c_board[8][8][2];
     copy_board(cur_board, c_board);
-    
     for (int i = 0; i<8; ++i)
         for (int j = 0; j<8; ++j)
             if (cur_board[j][i][1]==color)
@@ -269,4 +268,5 @@ int loss_q(char cur_board[8][8][2], char color)
                    
     return 1;
 }
+
 

@@ -1,5 +1,10 @@
 #include "main.h"
 
+void aboba(int *r)
+{
+    *r = 19;
+}
+
 int main()
 {
     char board[8][8][2] = {
@@ -35,10 +40,12 @@ int main()
     add_turn(board, from_str("b6"), from_str("d8"), 'w');
     add_turn(board, from_str("f8"), from_str("c5"), 'b');
     add_turn(board, from_str("f1"), from_str("h3"), 'w');
-    add_turn(board, from_str("c5"), from_str("f2"), 'b');
-    
-    print_turns(board, turns(board, from_str("e1")));
-    printf("%d\n", loss_q(board, 'w'));
+    //add_turn(board, from_str("c5"), from_str("f2"), 'b');
+    print_board(board);
+    //printf("%d\n", loss_q(board, 'w'));
+    int res = -1;
+    printf("%d\n", minimax(board, 0, 'b', 2, &res));
+    printf("\n%c%c -> %c%c", to_str(res/100)[0], to_str(res/100)[1], to_str(res%100)[0], to_str(res%100)[1]);
     // print_board(board);
     // for (int i = 0; i<8; ++i)
     //     for (int j = 0; j<8; ++j)
@@ -49,7 +56,7 @@ int main()
     //         v_clear(&v);
     //         getchar();
     //         }
-        
+
 
     return 0;
 }
