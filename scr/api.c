@@ -15,7 +15,7 @@ LRESULT WINAPI DefWindProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam
     else return DefWindowProcA(hwnd, message, wparam, lparam);
 }
 
-int WINAPI WinMain(HINSTANCE hInstance, // дескриптор (число, идентифицирующее программу)
+int WINAPI WinMain(HINSTANCE hInstance, // дескриптор (идентификатор программы)
                     HINSTANCE hPrevInstance, // предыдущий дескриптор процесса, использовался в ранних версиях Windows, сейчас устарел
                     LPSTR lpCmdLine, // аргументы командной строки в виде строки Юникода
                     int CmdShow) // управление способом отображения окна
