@@ -9,7 +9,7 @@ int check_turn(char cur_board[8][8][2], int a1, int a2, int b1, int b2)
     int x = b1 - a1, y = b2 - a2;
     char fig_t = cur_board[a2][a1][0], fig_c = cur_board[a2][a1][1];
     if (is_on_board(cur_board, b1, b2) && cur_board[b2][b1][1]==fig_c) return 0;
-    
+
     if (fig_t=='p' && fig_c=='w'){
         if (y==1 && x==0 && (!is_on_board(cur_board, b1, b2))) return 1;
         if (y==2 && x==0 && a2==1 && (!is_on_board(cur_board, b1, b2)) && (!is_on_board(cur_board, b1, b2-1))) return 1;
@@ -20,7 +20,7 @@ int check_turn(char cur_board[8][8][2], int a1, int a2, int b1, int b2)
     if (fig_t=='p' && fig_c=='b'){
         if (y==-1 && x==0 && (!is_on_board(cur_board, b1, b2))) return 1;
         if (y==-2 && x==0 && a2==6 && (!is_on_board(cur_board, b1, b2)) && (!is_on_board(cur_board, b1, b2+1))) return 1;
-        if (y==1 && (x==1 || x==-1) && is_on_board(cur_board, b1, b2)) return 1;
+        if (y==-1 && (x==1 || x==-1) && is_on_board(cur_board, b1, b2)) return 1;
         /*if (y==1 && (x==1 || x==-1) && (!is_on_board(cur_board, b1, b2))) return 2;*/
     }
 
@@ -75,11 +75,11 @@ int check_turn(char cur_board[8][8][2], int a1, int a2, int b1, int b2)
                 if (x<0 and cur_board[7][0][0]=='r' and cur_board[7][0][1]=='b' and !is_on_board(cur_board,1,7)) return 3;
         }
     }
-    
+
     return 0;
 }
 
-int check_checkmate(char cur_board[8][8][2], int x, int y, char color) 
+int check_checkmate(char cur_board[8][8][2], int x, int y, char color)
 {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
@@ -105,7 +105,7 @@ vector_int_t get_king_turns(int x, int y) {
     return king_turns;
 }
 
-void delete_checkmates_for_king(char cur_board[8][8][2], vector_int_t king_turns, char color) 
+void delete_checkmates_for_king(char cur_board[8][8][2], vector_int_t king_turns, char color)
 {
     int c = 0;
     while (c != king_turns.len) {
@@ -137,7 +137,7 @@ void write_turn(char cur_board[8][8][2], int a, int b)
     cur_board[a1][a2][1] = '0';
 }
 
-int add_turn(char cur_board[8][8][2], int a, int b, char cur_color) 
+int add_turn(char cur_board[8][8][2], int a, int b, char cur_color)
 {
     if (a<0 or b<0) return 0;
     int a1 = a/10, a2 = a%10;
@@ -264,8 +264,8 @@ int loss_q(char cur_board[8][8][2], char color)
             if (cur_board[j][i][1]==color)
                 for (int i1 = 0; i1<8; ++i1)
                     for (int j1 = 0; j1<8; ++j1)
-                        if (add_turn(c_board, 10*j+i, 10*j1+i1, color)) return 0;  
-                   
+                        if (add_turn(c_board, 10*j+i, 10*j1+i1, color)) return 0;
+
     return 1;
 }
 

@@ -17,16 +17,25 @@ int figure_value(char fig)
 int evaluate_position(char cur_board[8][8][2], char color)
 {
     int sum = 0;
+    char enemy = color=='w'?'b':'w';
     for (int i = 0; i<8; ++i)
         for (int j = 0; j<8; ++j)
             if (cur_board[i][j][1]==color) sum+=figure_value(cur_board[i][j][0]);
+            else if (cur_board[i][j][1]==enemy) sum-=figure_value(cur_board[i][j][0]);
     return sum;
 }
 
-int minimax(char cur_board[8][8][2], int flag, char color, int depth, int *best)
+int minimax(char cur_board[8][8][2], char color, int depth)
+{
+    int res = -1;
+    minimax_r(cur_board, 1, color, depth, depth, &res);
+    return res;
+}
+
+int minimax_r(char cur_board[8][8][2], int flag, char color, int depth, int max_depth, int *best)
 {
     if (depth==0){
-        int temp = -evaluate_position(cur_board, color);
+        int temp = evaluate_position(cur_board, color);
         return temp;
     }
     if (flag){
@@ -39,11 +48,14 @@ int minimax(char cur_board[8][8][2], int flag, char color, int depth, int *best)
                         char temp_board[8][8][2];
                         copy_board(cur_board, temp_board);
                         write_turn(temp_board, 10*j+i, t.data[k]);
-                        int bq = minimax(temp_board, !flag, color=='w'?'b':'w', depth-1, best);
+                        int bq = minimax_r(temp_board, !flag, color=='w'?'b':'w', depth-1, max_depth, best);
                         if (bq>best_move){
                             best_move = bq;
-                            *best = 100*(10*j+i)+t.data[k];
-                            //printf("%c%c -> %c%c\n", to_str(10*j+i)[0], to_str(10*j+i)[1], to_str(t.data[k])[0], to_str(t.data[k])[1]);
+                            if (depth==max_depth) *best = 100*(10*j+i)+t.data[k];
+                        } else if (bq==best_move && depth==max_depth){
+                            srand(time(NULL));
+                            int r = rand()%3;
+                            if (r) *best = 100*(10*j+i)+t.data[k];
                         }
                     }
                 }
@@ -58,11 +70,14 @@ int minimax(char cur_board[8][8][2], int flag, char color, int depth, int *best)
                         char temp_board[8][8][2];
                         copy_board(cur_board, temp_board);
                         write_turn(temp_board, 10*j+i, t.data[k]);
-                        int bq = minimax(temp_board, !flag, color=='w'?'b':'w', depth-1, best);
+                        int bq = minimax_r(temp_board, !flag, color=='w'?'b':'w', depth-1, max_depth, best);
                         if (bq<best_move){
                             best_move = bq;
-                            *best = 100*(10*j+i)+t.data[k];
-                            //printf("!%c%c -> %c%c\n", to_str(10*j+i)[0], to_str(10*j+i)[1], to_str(t.data[k])[0], to_str(t.data[k])[1]);
+                            if (depth==max_depth) *best = 100*(10*j+i)+t.data[k];
+                        }  else if (bq==best_move && depth==max_depth){
+                            srand(time(NULL));
+                            int r = rand()%3;
+                            if (r) *best = 100*(10*j+i)+t.data[k];
                         }
                     }
                 }

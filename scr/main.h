@@ -1,2 +1,1 @@
-#include "chess_engine.h"
-#include "bot_logic.h"
+#include "game.h"
