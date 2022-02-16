@@ -69,6 +69,7 @@ int position_bonus(char cur_board[8][8][2], char fig, int x, int y)
                         {20, 30, 10,  0,  0, 10, 30, 20}};
         return k[7-y][x];
      }
+     return 0;
 }
 
 int figure_value(char fig)

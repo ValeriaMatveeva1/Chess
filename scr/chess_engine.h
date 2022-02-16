@@ -4,8 +4,7 @@
 #include "vector.h"
 #include <stdio.h>
 #include <stdlib.h>
-#define or ||
-#define and &&
+
 #define min(a, b) ((a)>(b) ? (b):(a))
 #define max(a, b) ((a)<(b) ? (b):(a))
 #define abs(a) ((a)>0 ? (a): -(a))
@@ -20,7 +19,7 @@ void write_turn(char cur_board[8][8][2], int a, int b);
 int add_turn(char cur_board[8][8][2], int a, int b, char cur_color);
 void print_board(char cur_board[8][8][2]);
 int from_str(char a[2]);
-void copy_board(char board1[8][8][2], char board2[8][8][2]);
+void copy_board(const char board1[8][8][2], char board2[8][8][2]);
 char* to_str(int a);
 vector_int_t turns(char cur_board[8][8][2], int a1);
 void print_turns(char cur_board[8][8][2], vector_int_t v);

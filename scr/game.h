@@ -5,6 +5,7 @@
 #include "bot_logic.h"
 #include <stdlib.h>
 
+char ask_color();
 int ask_turn();
 void write_bot_turn(char cur_board[8][8][2], char color);
 void game(char color);

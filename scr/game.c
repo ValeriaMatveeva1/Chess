@@ -28,7 +28,6 @@ int ask_turn()
     char a[2], b[2], t[10];
     scanf("%s", t);
     a[0] = t[0]; a[1] = t[1]; b[0] = t[2]; b[1] = t[3];
-    int res = 100*from_str(a)+from_str(b);
     return 100*from_str(a)+from_str(b);
 }
 
