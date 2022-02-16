@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1645002160 source:d:\programming\c++\c\chess\scr\bot_logic.c
+1645005604 source:d:\programming\c++\c\chess\scr\bot_logic.c
 	"bot_logic.h"
 
-1645001658 d:\programming\c++\c\chess\scr\bot_logic.h
+1645005292 d:\programming\c++\c\chess\scr\bot_logic.h
 	"chess_engine.h"
 	<time.h>
 	<stdlib.h>
@@ -34,6 +34,6 @@
 	"bot_logic.h"
 	<stdlib.h>
 
-1645001238 source:d:\programming\c++\c\chess\scr\game.c
+1645003484 source:d:\programming\c++\c\chess\scr\game.c
 	"game.h"
 

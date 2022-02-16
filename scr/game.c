@@ -16,7 +16,7 @@ char ask_color()
     printf("Enter the color: ");
     char c;
     int temp = scanf("%c", &c);
-    if (temp==1 && (c=='w' || c=='r'))
+    if (temp==1 && (c=='w' || c=='b'))
         return c;
     else printf("Invalid input.\n");
     return '\n';
@@ -45,6 +45,7 @@ void game(char color)
     copy_board(start_board, board);
     if (color=='b') write_bot_turn(board, 'w');
     while(1){
+        printf("%s turn\n", flag=='w'?"White":"Black");
         if (flag==color){
             print_board(board);
             int t = ask_turn();
