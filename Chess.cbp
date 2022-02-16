@@ -39,6 +39,10 @@
 			<Option compilerVar="CC" />
 		</Unit>
 		<Unit filename="scr/chess_engine.h" />
+		<Unit filename="scr/game.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="scr/game.h" />
 		<Unit filename="scr/main.c">
 			<Option compilerVar="CC" />
 		</Unit>

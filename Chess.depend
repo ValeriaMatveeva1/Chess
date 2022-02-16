@@ -23,8 +23,9 @@
 	<stdio.h>
 	"vector.h"
 
-1644998787 source:d:\programming\c++\c\chess\scr\main.c
-	"main.h"
+1645049927 source:d:\programming\c++\c\chess\scr\main.c
+	<stdio.h>
+	<windows.h>
 
 1644998781 d:\programming\c++\c\chess\scr\main.h
 	"game.h"
