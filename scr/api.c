@@ -29,7 +29,7 @@ int WINAPI WinMain(HINSTANCE hInstance, // дескриптор (идентиф�
     RegisterClassA(&w);
 
     HWND hwnd;
-    hwnd = CreateWindow("Window", "Hello, it's my window!", WS_OVERLAPPEDWINDOW, 10, 10, 640, 480, NULL, NULL, hInstance, NULL);
+    hwnd = CreateWindow("Window", "Hello, it's my window!", WS_OVERLAPPEDWINDOW, 100, 100, 640, 480, NULL, NULL, hInstance, NULL);
     ShowWindow(hwnd, SW_NORMAL);
     UpdateWindow(hwnd);
 
