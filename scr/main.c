@@ -2,10 +2,13 @@
 #include <windows.h>
 #define win_len 1000
 #define win_height 700
+#define box_len 80
 
 HWND bt_color;
 HWND bt_again;
 HWND label;
+
+HWND labels[8][8];
 
 char color = 'w';
 
@@ -27,19 +30,47 @@ int player_turn;
 void game_restart()
 {
     copy_board(new_board, board);
+    re_draw_board();
 }
 
 int from_win_coord(int x, int y)
 {
-    return 10*x+y;
+    for (int i = 0; i<8; ++i){
+        for (int j = 0; j<8; ++j){
+                int x1 = 10+(box_len+1)*i;
+                int y1 = 10+(box_len+1)*j;
+                if ((x>x1) && (x<x1+(box_len+1)) && (y>y1) && (y<y1+(box_len+1))) return i*10+7-j;
+        }
+    }
+    return -1;
+}
+
+void re_draw_board()
+{
+        for (int i = 0; i<8; ++i){
+        for (int j = 0; j<8; ++j){
+            char temp[3]; temp[0] = board[7-i][j][0]; temp[1] = board[7-i][j][1]; temp[2] = '\0';
+            SetWindowText(labels[i][j], temp[0]!='0'?temp:'\0');
+        }
+    }
 }
 
 void draw_turn(int player_turn)
 {
-    int a = player_turn/10;
-    int b = player_turn%10;
-    printf("%d %d %d %d\n", a/10, a%10, b/10, b%10);
+    int a = player_turn/100, b = player_turn%100;
+    if (player_turn==-1) return;
+    char *rt1 = to_str(a); char* rt2 = to_str(b);
+    printf("%c%c %c%c\n", rt1[0], rt1[1], rt2[0], rt2[1]);
+    if (add_turn(board, player_turn/100, player_turn%100, color)) {
+        int bt = minimax(board, color=='w'?'b':'w', 2);
+        write_turn(board, bt/100, bt%100);
+    }
+
+    re_draw_board();
 }
+
+
+
 
 LRESULT WINAPI DefWindProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam)
 {
@@ -63,16 +94,28 @@ LRESULT WINAPI DefWindProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam
             color = (color=='w'? 'b':'w');
             SetWindowText(label, color=='w'? "You are playing white.":"You are playing black.");
             game_restart();
+            if (color=='b'){
+                int bt = minimax(board, 'w', 2);
+                write_turn(board, bt/100, bt%100);
+                re_draw_board();
+            }
         };
-        if (bt_again == lparam) game_restart();
+        if (bt_again == lparam) {
+            game_restart();
+            if (color=='b'){
+                int bt = minimax(board, 'w', 2);
+                write_turn(board, bt/100, bt%100);
+                re_draw_board();
+            }
+        }
     }
     else return DefWindowProcA(hwnd, message, wparam, lparam);
 }
 
-int WINAPI WinMain(HINSTANCE hInstance, // äåñêðèïòîð (èäåíòèôèêàòîð ïðîãðàììû)
-                    HINSTANCE hPrevInstance, // ïðåäûäóùèé äåñêðèïòîð ïðîöåññà, èñïîëüçîâàëñÿ â ðàííèõ âåðñèÿõ Windows, ñåé÷àñ óñòàðåë
-                    LPSTR lpCmdLine, // àðãóìåíòû êîìàíäíîé ñòðîêè â âèäå ñòðîêè Þíèêîäà
-                    int CmdShow) // óïðàâëåíèå ñïîñîáîì îòîáðàæåíèÿ îêíà
+int WINAPI WinMain(HINSTANCE hInstance, // Ã¤Ã¥Ã±ÃªÃ°Ã¨Ã¯Ã²Ã®Ã° (Ã¨Ã¤Ã¥Ã­Ã²Ã¨Ã´Ã¨ÃªÃ Ã²Ã®Ã° Ã¯Ã°Ã®Ã£Ã°Ã Ã¬Ã¬Ã»)
+                    HINSTANCE hPrevInstance, // Ã¯Ã°Ã¥Ã¤Ã»Ã¤Ã³Ã¹Ã¨Ã© Ã¤Ã¥Ã±ÃªÃ°Ã¨Ã¯Ã²Ã®Ã° Ã¯Ã°Ã®Ã¶Ã¥Ã±Ã±Ã , Ã¨Ã±Ã¯Ã®Ã«Ã¼Ã§Ã®Ã¢Ã Ã«Ã±Ã¿ Ã¢ Ã°Ã Ã­Ã­Ã¨Ãµ Ã¢Ã¥Ã°Ã±Ã¨Ã¿Ãµ Windows, Ã±Ã¥Ã©Ã·Ã Ã± Ã³Ã±Ã²Ã Ã°Ã¥Ã«
+                    LPSTR lpCmdLine, // Ã Ã°Ã£Ã³Ã¬Ã¥Ã­Ã²Ã» ÃªÃ®Ã¬Ã Ã­Ã¤Ã­Ã®Ã© Ã±Ã²Ã°Ã®ÃªÃ¨ Ã¢ Ã¢Ã¨Ã¤Ã¥ Ã±Ã²Ã°Ã®ÃªÃ¨ ÃžÃ­Ã¨ÃªÃ®Ã¤Ã 
+                    int CmdShow) // Ã³Ã¯Ã°Ã Ã¢Ã«Ã¥Ã­Ã¨Ã¥ Ã±Ã¯Ã®Ã±Ã®Ã¡Ã®Ã¬ Ã®Ã²Ã®Ã¡Ã°Ã Ã¦Ã¥Ã­Ã¨Ã¿ Ã®ÃªÃ­Ã 
 {
     WNDCLASSA w;
     memset(&w, 0, sizeof(WNDCLASSA));
@@ -88,9 +131,19 @@ int WINAPI WinMain(HINSTANCE hInstance, // äåñêðèïòîð (èäåíòèôèêàòîð ïðîãðàììû)
 
     bt_color = CreateWindow("button", "Change color", WS_VISIBLE | WS_CHILD, win_len-200, win_height/2-25, 150, 50, hwnd, NULL, NULL, NULL);
     bt_again = CreateWindow("button", "Play again", WS_VISIBLE | WS_CHILD, win_len-200, win_height/2+30, 150, 50, hwnd, NULL, NULL, NULL);
+
+
     label = CreateWindow("static", "You are playing white.", WS_VISIBLE | WS_CHILD, win_len-200, win_height/2+85, 150, 50, hwnd, NULL, NULL, NULL);
 
     game_restart();
+
+    for (int i = 0; i<8; ++i){
+        for (int j = 0; j<8; ++j){
+            char temp[3]; temp[0] = board[7-i][j][0]; temp[1] = board[7-i][j][1]; temp[2] = '\0';
+            labels[i][j] = CreateWindow("static", temp[0]!='0'?temp:'\0', WS_VISIBLE | WS_CHILD, 10+(box_len+1)*j, 10+(box_len+1)*i, box_len, box_len, hwnd, NULL, NULL, NULL);
+        }
+    }
+
 
     MSG msg;
     while (GetMessage(&msg, NULL, 0, 0))
