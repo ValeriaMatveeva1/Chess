@@ -38,3 +38,39 @@
 1645098748 source:d:\programming\c++\c\chess\scr\game.c
 	"game.h"
 
+1645177656 source:c:\lera\c and c++\chess\scr\bot_logic.c
+	"bot_logic.h"
+
+1645099326 c:\lera\c and c++\chess\scr\bot_logic.h
+	"chess_engine.h"
+	<time.h>
+	<stdlib.h>
+
+1645099326 c:\lera\c and c++\chess\scr\chess_engine.h
+	"vector.h"
+	<stdio.h>
+	<stdlib.h>
+
+1645099326 c:\lera\c and c++\chess\scr\vector.h
+	<stdlib.h>
+	<string.h>
+
+1645098222 source:c:\lera\c and c++\chess\scr\chess_engine.c
+	"chess_engine.h"
+
+1645098748 source:c:\lera\c and c++\chess\scr\game.c
+	"game.h"
+
+1645099326 c:\lera\c and c++\chess\scr\game.h
+	"chess_engine.h"
+	"bot_logic.h"
+	<stdlib.h>
+
+1645437820 source:c:\lera\c and c++\chess\scr\main.c
+	<stdio.h>
+	<windows.h>
+
+1644750988 source:c:\lera\c and c++\chess\scr\vector.c
+	<stdio.h>
+	"vector.h"
+

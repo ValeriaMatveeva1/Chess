@@ -40,7 +40,7 @@ int from_win_coord(int x, int y)
         for (int j = 0; j<8; ++j){
                 int x1 = 10+(box_len+1)*i;
                 int y1 = 10+(box_len+1)*j;
-                if ((x>x1) && (x<x1+(box_len+1)) && (y>y1) && (y<y1+(box_len+1))) return i*10+7-j;
+                if ((x>x1) && (x<x1+(box_len+1)) && (y>y1) && (y<y1+(box_len+1))) return color=='w'? i*10+7-j : (7-i)*10+j;
         }
     }
     return -1;
@@ -50,8 +50,14 @@ void re_draw_board()
 {
     for (int i = 0; i<8; ++i){
         for (int j = 0; j<8; ++j){
-            char temp[3]; temp[0] = board[7-i][j][0]; temp[1] = board[7-i][j][1]; temp[2] = '\0';
-            SetWindowText(labels[i][j], temp[0]!='0'?temp:'\0');
+            if (color=='w'){
+                char temp[3]; temp[0] = board[7-i][j][0]; temp[1] = board[7-i][j][1]; temp[2] = '\0';
+                SetWindowText(labels[i][j], temp[0]!='0'?temp:'\0');
+            } else {
+                char temp[3]; temp[0] = board[i][7-j][0]; temp[1] = board[i][7-j][1]; temp[2] = '\0';
+                SetWindowText(labels[i][j], temp[0]!='0'?temp:'\0');
+            }
+
         }
     }
 }
@@ -111,9 +117,12 @@ LRESULT WINAPI DefWindProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam
             }
         }
     } else if (message==WM_CTLCOLORSTATIC) {
-        if (first_click && lparam==labels[7-player_turn%10][player_turn/10]){
-        SetBkMode((HDC)wparam, TRANSPARENT);
-        return CreateSolidBrush(RGB(201,201,201));
+        if (color=='w' && first_click && lparam==labels[7-player_turn%10][player_turn/10]){
+            SetBkMode((HDC)wparam, TRANSPARENT);
+            return CreateSolidBrush(RGB(201,201,201));
+        } else if (color=='b' && first_click && lparam==labels[player_turn%10][7-player_turn/10]){
+            SetBkMode((HDC)wparam, TRANSPARENT);
+            return CreateSolidBrush(RGB(201,201,201));
         } else {
             int temp = 0;
             for (int i = 0; i<8; ++i)
@@ -127,10 +136,7 @@ LRESULT WINAPI DefWindProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam
     else return DefWindowProcA(hwnd, message, wparam, lparam);
 }
 
-int WINAPI WinMain(HINSTANCE hInstance, // äåñêðèïòîð (èäåíòèôèêàòîð ïðîãðàììû)
-                    HINSTANCE hPrevInstance, // ïðåäûäóùèé äåñêðèïòîð ïðîöåññà, èñïîëüçîâàëñÿ â ðàííèõ âåðñèÿõ Windows, ñåé÷àñ óñòàðåë
-                    LPSTR lpCmdLine, // àðãóìåíòû êîìàíäíîé ñòðîêè â âèäå ñòðîêè Þíèêîäà
-                    int CmdShow) // óïðàâëåíèå ñïîñîáîì îòîáðàæåíèÿ îêíà
+int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int CmdShow)
 {
     WNDCLASSA w;
     memset(&w, 0, sizeof(WNDCLASSA));
