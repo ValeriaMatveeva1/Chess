@@ -4,6 +4,7 @@
 #define win_height 700
 #define box_len 80
 
+
 HWND bt_color;
 HWND bt_again;
 HWND label;
@@ -47,7 +48,7 @@ int from_win_coord(int x, int y)
 
 void re_draw_board()
 {
-        for (int i = 0; i<8; ++i){
+    for (int i = 0; i<8; ++i){
         for (int j = 0; j<8; ++j){
             char temp[3]; temp[0] = board[7-i][j][0]; temp[1] = board[7-i][j][1]; temp[2] = '\0';
             SetWindowText(labels[i][j], temp[0]!='0'?temp:'\0');
@@ -82,6 +83,7 @@ LRESULT WINAPI DefWindProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam
         if (first_click==0){
             player_turn = from_win_coord(x, y);
             first_click = 1;
+            re_draw_board();
         } else {
             first_click = 0;
             player_turn = 100*player_turn+from_win_coord(x, y);
@@ -106,6 +108,19 @@ LRESULT WINAPI DefWindProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam
                 int bt = minimax(board, 'w', 2);
                 write_turn(board, bt/100, bt%100);
                 re_draw_board();
+            }
+        }
+    } else if (message==WM_CTLCOLORSTATIC) {
+        if (first_click && lparam==labels[7-player_turn%10][player_turn/10]){
+        SetBkMode((HDC)wparam, TRANSPARENT);
+        return CreateSolidBrush(RGB(201,201,201));
+        } else {
+            int temp = 0;
+            for (int i = 0; i<8; ++i)
+                for (int j = 0; j<8; ++j) if ((i%2+j%2)%2 && lparam==labels[i][j]) {temp = 1; break;};
+            if (temp){
+                SetBkMode((HDC)wparam, TRANSPARENT);
+                return CreateSolidBrush(RGB(220,220,220));
             }
         }
     }
@@ -140,7 +155,7 @@ int WINAPI WinMain(HINSTANCE hInstance, // äåñêðèïòîð (èäåíòèô�
     for (int i = 0; i<8; ++i){
         for (int j = 0; j<8; ++j){
             char temp[3]; temp[0] = board[7-i][j][0]; temp[1] = board[7-i][j][1]; temp[2] = '\0';
-            labels[i][j] = CreateWindow("static", temp[0]!='0'?temp:'\0', WS_VISIBLE | WS_CHILD, 10+(box_len+1)*j, 10+(box_len+1)*i, box_len, box_len, hwnd, NULL, NULL, NULL);
+            labels[i][j] = CreateWindow("static", temp[0]!='0'?temp:'\0', WS_VISIBLE | WS_CHILD| SS_CENTER| WS_EX_CLIENTEDGE, 10+(box_len+1)*j, 10+(box_len+1)*i, box_len, box_len, hwnd, NULL, NULL, NULL);
         }
     }
 

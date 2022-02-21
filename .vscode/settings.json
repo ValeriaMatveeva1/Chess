@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "chess_engine.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "windows.h": "c"
     }
 }
