@@ -72,7 +72,8 @@ void draw_turn(int player_turn)
         int bt = minimax(board, color=='w'?'b':'w', 2);
         write_turn(board, bt/100, bt%100);
     }
-
+    if (loss_q(board, color)) SetWindowText(label, "You lose");
+    if (loss_q(board, color=='w'?'b':'w')) SetWindowText(label, "You win");
     re_draw_board();
 }
 
@@ -107,8 +108,9 @@ LRESULT WINAPI DefWindProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam
                 write_turn(board, bt/100, bt%100);
                 re_draw_board();
             }
-        };
+        }
         if (bt_again == lparam) {
+            SetWindowText(label, color=='w'? "You are playing white.":"You are playing black.");
             game_restart();
             if (color=='b'){
                 int bt = minimax(board, 'w', 2);
