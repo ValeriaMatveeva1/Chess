@@ -1,6 +1,7 @@
 #include "chess_engine.h"
 
-int is_on_board(char cur_board[8][8][2], int x, int y) {
+int is_on_board(char cur_board[8][8][2], int x, int y)
+{
     return cur_board[y][x][0] != '0';
 }
 
@@ -62,19 +63,19 @@ int check_turn(char cur_board[8][8][2], int a1, int a2, int b1, int b2)
     }
     if (fig_t=='k'){
         if (abs(x)<2 && abs(y)<2) return 1;
-        if (fig_c=='w' && abs(x)==2 && y==0 && a2==0){
-            int m1 = min(a1, b1);
-            if (!is_on_board(cur_board, m1+1, 0) && !is_on_board(cur_board, m1+2, 0)){
-                if (x>0 && cur_board[0][7][0]=='r' && cur_board[0][7][1]=='w') return 3;
-                if (x<0 && cur_board[0][0][0]=='r' && cur_board[0][0][1]=='w' && !is_on_board(cur_board,1,0)) return 3;
-            }
+        if (fig_c=='w' && abs(x)==2 && y==0 && a2==0 && a1==4){
+            if (x>0 && !is_on_board(cur_board, 5, 0) && !is_on_board(cur_board, 6, 0))
+                if (cur_board[0][7][0]=='r' && cur_board[0][7][1]=='w') return 3;
+            if (x<0 && !is_on_board(cur_board, 1, 0) && !is_on_board(cur_board, 2, 0) && !is_on_board(cur_board, 3, 0))
+                if (cur_board[0][0][0]=='r' && cur_board[0][0][1]=='w') return 3;
+
         }
-        if (fig_c=='b' && abs(x)==2 && y==0 && a2==7){
-            int m1 = min(a1, b1);
-            if (!is_on_board(cur_board, m1+1, 7) && !is_on_board(cur_board, m1+2, 7)){
-                if (x>0 && cur_board[7][7][0]=='r' && cur_board[7][7][1]=='b') return 3;
-                if (x<0 && cur_board[7][0][0]=='r' && cur_board[7][0][1]=='b' && !is_on_board(cur_board,1,7)) return 3;
-            }
+        if (fig_c=='b' && abs(x)==2 && y==0 && a2==7 && a1==4){
+            if (x>0 && !is_on_board(cur_board, 5, 7) && !is_on_board(cur_board, 6, 7))
+                if (cur_board[7][7][0]=='r' && cur_board[7][7][1]=='w') return 3;
+            if (x<0 && !is_on_board(cur_board, 1, 7) && !is_on_board(cur_board, 2, 7) && !is_on_board(cur_board, 3, 7))
+                if (cur_board[7][0][0]=='r' && cur_board[7][0][1]=='w') return 3;
+
         }
     }
 
@@ -253,8 +254,8 @@ vector_int_t turns(char cur_board[8][8][2], int a1)
         for (int j = 0; j<8; ++j){
             char f11 = cur_board[i][j][0], f21 = cur_board[a1%10][a1/10][0];
             char f12 = cur_board[i][j][1], f22 = cur_board[a1%10][a1/10][1];
-            int t = add_turn(cur_board, a1, j*10+i, cur_board[a1%10][a1/10][1]);
-            if (t){
+            int t = check_turn(cur_board, a1/10, a1%10, j, i);
+            if (add_turn(cur_board, a1, j*10+i, cur_board[a1%10][a1/10][1])){
                 cur_board[i][j][0] = f11;
                 cur_board[i][j][1] = f12;
                 cur_board[a1%10][a1/10][0] = f21;
