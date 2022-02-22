@@ -21,6 +21,7 @@ void print_board(char cur_board[8][8][2]);
 int from_str(char a[2]);
 void copy_board(const char board1[8][8][2], char board2[8][8][2]);
 char* to_str(int a);
+int find_rock(char board[8][8][2], char color, int x);
 vector_int_t turns(char cur_board[8][8][2], int a1);
 void print_turns(char cur_board[8][8][2], vector_int_t v);
 int loss_q(char cur_board[8][8][2], char color);

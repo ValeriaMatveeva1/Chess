@@ -156,17 +156,23 @@ int add_turn(char cur_board[8][8][2], int a, int b, char cur_color)
         return 0;
     }
     if (cur_board[a2][a1][0] == 'k' && turn != 3) {
+        char f1 = cur_board[b2][b1][0], f2 = cur_board[b2][b1][1];
         write_turn(cur_board, a, b);
         if (check_checkmate(cur_board, b1, b2, color)){
             write_turn(cur_board, b, a);
+            cur_board[b2][b1][0] = f1;
+            cur_board[b2][b1][1] = f2;
             return 0;
         }
     } else {
         int kp = king_position(cur_board, color);
         if (check_checkmate(cur_board, kp/10, kp%10, color)){
+            char f1 = cur_board[b2][b1][0], f2 = cur_board[b2][b1][1];
             write_turn(cur_board, a, b);
             if (check_checkmate(cur_board, kp/10, kp%10, color)){
                 write_turn(cur_board, b, a);
+                cur_board[b2][b1][0] = f1;
+                cur_board[b2][b1][1] = f2;
                 return 0;
             }
         } else {
@@ -231,17 +237,37 @@ char* to_str(int a)
     return b;
 }
 
+int find_rock(char board[8][8][2], char color, int x)
+{
+    if (color=='w' && x>0) return 5070;
+    if (color=='w' && x<0) return 3000;
+    if (color=='b' && x>0) return 5777;
+    if (color=='b' && x<0) return 3707;
+}
+
 vector_int_t turns(char cur_board[8][8][2], int a1)
 {
     vector_int_t v;
     v_init(&v);
-    char c_board[8][8][2];
-    copy_board(cur_board, c_board);
     for (int i = 0; i<8; ++i)
         for (int j = 0; j<8; ++j){
-            if (add_turn(c_board, a1, j*10+i, cur_board[a1%10][a1/10][1])){
-                copy_board(cur_board, c_board);
+            char f11 = cur_board[i][j][0], f21 = cur_board[a1%10][a1/10][0];
+            char f12 = cur_board[i][j][1], f22 = cur_board[a1%10][a1/10][1];
+            int t = add_turn(cur_board, a1, j*10+i, cur_board[a1%10][a1/10][1]);
+            if (t){
+                cur_board[i][j][0] = f11;
+                cur_board[i][j][1] = f12;
+                cur_board[a1%10][a1/10][0] = f21;
+                cur_board[a1%10][a1/10][1] = f22;
                 v_push(&v, j*10+i);
+                if (t==3){
+                    int r = find_rock(cur_board, cur_board[a1%10][a1/10][1], j-a1/10);
+                    int r1 = r/100, r2 = r%100;
+                    cur_board[r1%10][r1/10][0] = '0';
+                    cur_board[r1%10][r1/10][1] = '0';
+                    cur_board[r2%10][r2/10][0] = 'r';
+                    cur_board[r2%10][r2/10][1] = cur_board[a1%10][a1/10][1];
+                }
             }
         }
     return v;
@@ -264,7 +290,7 @@ int loss_q(char cur_board[8][8][2], char color)
     copy_board(cur_board, c_board);
     for (int i = 0; i<8; ++i)
         for (int j = 0; j<8; ++j)
-            if (cur_board[j][i][1]==color)
+            if (cur_board[i][j][1]==color)
                 for (int i1 = 0; i1<8; ++i1)
                     for (int j1 = 0; j1<8; ++j1)
                         if (add_turn(c_board, 10*j+i, 10*j1+i1, color)) return 0;

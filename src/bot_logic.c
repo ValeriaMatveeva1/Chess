@@ -81,7 +81,7 @@ int figure_value(char fig)
     case 'r': return 500;
     case 'q': return 900;
     case 'k': return 20000;
-    default: {printf("Error 1"); return -1000000;}
+    default: {printf("Error 1\n"); return INT_MIN;}
     }
 }
 
@@ -107,7 +107,7 @@ int evaluate_position(char cur_board[8][8][2], char color)
 int minimax(char cur_board[8][8][2], char color, int depth)
 {
     int res = -1;
-    minimax_r(cur_board, 1, color, depth, depth, &res);
+    minimax_with_a_b(cur_board, 1, color, depth, depth, &res, INT_MIN, INT_MAX);
     return res;
 }
 
@@ -118,7 +118,7 @@ int minimax_r(char cur_board[8][8][2], int flag, char color, int depth, int max_
         return temp;
     }
     if (flag){
-        int best_move = -1000000;
+        int best_move = INT_MIN;
         for (int i = 0; i<8; ++i)
             for (int j = 0; j<8; ++j)
                 if (cur_board[i][j][1]==color){
@@ -140,7 +140,7 @@ int minimax_r(char cur_board[8][8][2], int flag, char color, int depth, int max_
                 }
         return best_move;
     } else {
-        int best_move = 1000000;
+        int best_move = INT_MAX;
         for (int i = 0; i<8; ++i)
             for (int j = 0; j<8; ++j)
                 if (cur_board[i][j][1]==color){
@@ -164,4 +164,54 @@ int minimax_r(char cur_board[8][8][2], int flag, char color, int depth, int max_
     }
 }
 
+
+int minimax_with_a_b(char cur_board[8][8][2], int flag, char color, int depth, int max_depth, int *best, int alpha, int beta)
+{
+    if (depth==0){
+        int temp = evaluate_position(cur_board, color);
+        return temp;
+    }
+    int best_move = flag? INT_MIN : INT_MAX;
+    for (int i = 0; i<8 && beta>=alpha; ++i)
+        for (int j = 0; j<8 && beta>=alpha; ++j)
+            if (cur_board[i][j][1]==color){
+                vector_int_t t = turns(cur_board, 10*j+i);
+                for (int k = 0; k<t.len && beta>=alpha; ++k) {
+                    int t_d = t.data[k];
+                    int roque = check_turn(cur_board, j, i, t_d/10, t_d%10)==3;
+                    char f11 = cur_board[i][j][0], f21 = cur_board[t_d%10][t_d/10][0];
+                    char f12 = cur_board[i][j][1], f22 = cur_board[t_d%10][t_d/10][1];
+                    write_turn(cur_board, 10*j+i, t_d);
+                    int bq = minimax_with_a_b(cur_board, !flag, color=='w'?'b':'w', depth-1, max_depth, best, alpha, beta);
+                    if ((bq>best_move)&&flag || (!flag)&&(bq<best_move)){
+                        best_move = bq;
+                        if (depth==max_depth) *best = 100*(10*j+i)+t_d;
+                        if (bq==best_move && depth==max_depth){
+                            srand(time(NULL));
+                            if (rand()%3) *best = 100*(10*j+i)+t_d;
+                        }
+                    }
+
+                    cur_board[i][j][0] = f11;
+                    cur_board[i][j][1] = f12;
+                    cur_board[t_d%10][t_d/10][0] = f21;
+                    cur_board[t_d%10][t_d/10][1] = f22;
+                    if (roque){
+                        int r = find_rock(cur_board, color, t_d/10-j);
+                        int r1 = r/100, r2 = r%100;
+                        cur_board[r1%10][r1/10][0] = '0';
+                        cur_board[r1%10][r1/10][1] = '0';
+                        cur_board[r2%10][r2/10][0] = 'r';
+                        cur_board[r2%10][r2/10][1] = color;
+                    }
+
+                    if (flag){
+                        alpha = alpha<bq? bq : alpha;
+                    } else {
+                        beta = beta<bq? beta: bq;
+                    }
+                }
+            }
+        return best_move;
+}
 
