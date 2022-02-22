@@ -110,3 +110,45 @@
 	<stdio.h>
 	"vector.h"
 
+1645526364 source:d:\programming\c++\c\chess\src\bot_logic.c
+	"bot_logic.h"
+
+1645527009 d:\programming\c++\c\chess\src\bot_logic.h
+	"chess_engine.h"
+	<time.h>
+	<stdlib.h>
+
+1645527063 d:\programming\c++\c\chess\src\chess_engine.h
+	"vector.h"
+	<stdio.h>
+	<stdlib.h>
+
+1645439926 d:\programming\c++\c\chess\src\vector.h
+	<stdlib.h>
+	<string.h>
+
+1645527084 source:d:\programming\c++\c\chess\src\chess_engine.c
+	"chess_engine.h"
+
+1645439926 source:d:\programming\c++\c\chess\src\game.c
+	"game.h"
+
+1645439926 d:\programming\c++\c\chess\src\game.h
+	"chess_engine.h"
+	"bot_logic.h"
+	<stdlib.h>
+
+1645439926 source:d:\programming\c++\c\chess\src\vector.c
+	<stdio.h>
+	"vector.h"
+
+1645537362 source:d:\programming\c++\c\chess\src\main.c
+	"main.h"
+
+1645537283 d:\programming\c++\c\chess\src\main.h
+	"chess_engine.h"
+	"bot_logic.h"
+	<stdlib.h>
+	<stdio.h>
+	<windows.h>
+
