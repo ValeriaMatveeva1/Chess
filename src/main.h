@@ -12,5 +12,6 @@ void game_restart();
 int from_win_coord(int x, int y);
 char* long_fig_name(char short_name[2]);
 void re_draw_board();
-void draw_turn(int player_turn);
+void draw_turn(int player_turn, HWND hwnd);
 LRESULT WINAPI DefWindProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam);
+void draw_bitmaps(HWND hwnd);

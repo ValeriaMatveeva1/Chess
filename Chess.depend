@@ -141,10 +141,10 @@
 	<stdio.h>
 	"vector.h"
 
-1645540799 source:d:\programming\c++\c\chess\src\main.c
+1645630763 source:d:\programming\c++\c\chess\src\main.c
 	"main.h"
 
-1645540799 d:\programming\c++\c\chess\src\main.h
+1645624887 d:\programming\c++\c\chess\src\main.h
 	"chess_engine.h"
 	"bot_logic.h"
 	<stdlib.h>
@@ -157,4 +157,12 @@
 	<stdlib.h>
 	<stdio.h>
 	<windows.h>
+
+1645611378 source:d:\programming\c++\c\chess\src\main.rc
+
+1645612361 source:d:\programming\c++\c\chess\src\resource.rc
+	<windows.h>
+	"resource.h"
+
+1645612428 d:\programming\c++\c\chess\src\resource.h
 
