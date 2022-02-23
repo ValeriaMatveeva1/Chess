@@ -1,10 +1,27 @@
 #include "chess_engine.h"
+/*
+    все ходы хранятся в виде числового представления, в виде xy,
+    где x = кордината по оси х (от 0 до 7) и в символьном формате принимает значения:
+    a, b, c, d, e, f, g, h
+    y - кордината по оси y (от 0 до 7), которая в символьном формате принимает значения
+    1, 2, 3, 4, 5, 6, 7, 8
+*/
 
+
+/*
+    функция проверки наличи фигуры на доске
+*/
 int is_on_board(char cur_board[8][8][2], int x, int y)
 {
     return cur_board[y][x][0] != '0';
 }
 
+/*
+    функция, проверяющая ход
+    0 - ход сделать нельзя
+    1 - можно
+    3 - рокировка
+*/
 int check_turn(char cur_board[8][8][2], int a1, int a2, int b1, int b2)
 {
     int x = b1 - a1, y = b2 - a2;
@@ -101,6 +118,9 @@ int check_turn(char cur_board[8][8][2], int a1, int a2, int b1, int b2)
     return 0;
 }
 
+/*
+    функция проврки наличия шаха у игрока с цветом color
+*/
 int check_checkmate(char cur_board[8][8][2], int x, int y, char color)
 {
     for (int i = 0; i < 8; i++) {
@@ -113,6 +133,9 @@ int check_checkmate(char cur_board[8][8][2], int x, int y, char color)
     return 0;
 }
 
+/*
+    список всех ходов короля
+*/
 vector_int_t get_king_turns(int x, int y) {
     vector_int_t king_turns;
     v_init(&king_turns);
@@ -135,6 +158,9 @@ vector_int_t get_king_turns(int x, int y) {
     return king_turns;
 }
 
+/*
+    убираем из списка ходов короля те ходы, которые попадают под шах
+*/
 void delete_checkmates_for_king(char cur_board[8][8][2], vector_int_t king_turns, char color)
 {
     int c = 0;
@@ -147,6 +173,9 @@ void delete_checkmates_for_king(char cur_board[8][8][2], vector_int_t king_turns
     }
 }
 
+/*
+    функция, выдающая положение короля цвета color
+*/
 int king_position(char cur_board[8][8][2], char color)
 {
     for (int i = 0; i < 8; i++) {
@@ -158,6 +187,9 @@ int king_position(char cur_board[8][8][2], char color)
     return -1;
 }
 
+/*
+    здесь записывается ход в массив 
+*/
 void write_turn(char cur_board[8][8][2], int a, int b)
 {
     int a2 = a/10, a1 = a%10;
@@ -168,6 +200,11 @@ void write_turn(char cur_board[8][8][2], int a, int b)
     cur_board[a1][a2][1] = '0';
 }
 
+/*
+    функция добавления хода на доску
+    0 - ход не записан
+    1 - ход записан
+*/
 int add_turn(char cur_board[8][8][2], int a, int b, char cur_color)
 {
     if (a<0 || b<0)
@@ -237,6 +274,9 @@ int add_turn(char cur_board[8][8][2], int a, int b, char cur_color)
     return 1;
 }
 
+/*
+    печать доски в консоль
+*/
 void print_board(char cur_board[8][8][2])
 {
     for (int i = 0; i<8; ++i){
@@ -248,11 +288,17 @@ void print_board(char cur_board[8][8][2])
     printf("\n");
 }
 
+/*
+    перевод хода из символьной записи в числовую
+*/
 int from_str(char a[2])
 {
     return ((int)a[0]-97)*10 + ((int)a[1]-48-1);
 }
 
+/*
+    метод копирования доски 
+*/
 void copy_board(const char board1[8][8][2], char board2[8][8][2])
 {
     for (int i = 0; i<8; ++i)
@@ -260,6 +306,9 @@ void copy_board(const char board1[8][8][2], char board2[8][8][2])
             for (int k = 0; k<2; ++k) board2[i][j][k] = board1[i][j][k];
 }
 
+/*
+    перевод хода из числовой записи в символьную
+*/
 char* to_str(int a)
 {
     char *b = malloc(2);
@@ -268,6 +317,9 @@ char* to_str(int a)
     return b;
 }
 
+/*
+    функция, находящая позицию крепости при рокировке
+*/
 int find_rock(char board[8][8][2], char color, int x)
 {
     if (color=='w' && x>0) return 5070;
@@ -276,6 +328,9 @@ int find_rock(char board[8][8][2], char color, int x)
     if (color=='b' && x<0) return 3707;
 }
 
+/*
+    список, содержащий всевозможные ходы для фигуры, стоящей на позиции а1
+*/
 vector_int_t turns(char cur_board[8][8][2], int a1)
 {
     vector_int_t v;
@@ -304,6 +359,9 @@ vector_int_t turns(char cur_board[8][8][2], int a1)
     return v;
 }
 
+/*
+    метод печати списка ходов фигуры на доске в консоль
+*/
 void print_turns(char cur_board[8][8][2], vector_int_t v)
 {
     char c_board[8][8][2];
@@ -315,6 +373,9 @@ void print_turns(char cur_board[8][8][2], vector_int_t v)
     print_board(c_board);
 }
 
+/*
+    функция, проверяющая проигрыш
+*/
 int loss_q(char cur_board[8][8][2], char color)
 {
     char c_board[8][8][2];
@@ -329,5 +390,3 @@ int loss_q(char cur_board[8][8][2], char color)
 
     return 1;
 }
-
-

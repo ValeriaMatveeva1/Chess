@@ -1,5 +1,8 @@
 #include "bot_logic.h"
 
+/*
+    функция добавляющая позиционную оценку фигурам
+*/
 int position_bonus(char cur_board[8][8][2], char fig, int x, int y)
 {
     if (fig=='p'){
@@ -72,6 +75,10 @@ int position_bonus(char cur_board[8][8][2], char fig, int x, int y)
      return 0;
 }
 
+
+/*
+    функция оценки каждой фигуры отдельно
+*/
 int figure_value(char fig)
 {
     switch (fig){
@@ -85,6 +92,9 @@ int figure_value(char fig)
     }
 }
 
+/*
+    функция оценки всей доски в целом
+*/
 int evaluate_position(char cur_board[8][8][2], char color)
 {
     int sum = 0;
@@ -108,6 +118,9 @@ int evaluate_position(char cur_board[8][8][2], char color)
     return sum;
 }
 
+/*
+    функция, запускающая рекурсивный алгоритм минимакс (с альфа/бета отсечениями)
+*/
 int minimax(char cur_board[8][8][2], char color, int depth)
 {
     int res = -1;
@@ -115,6 +128,9 @@ int minimax(char cur_board[8][8][2], char color, int depth)
     return res;
 }
 
+/*
+    алгоритм минимакс без альфа/бета отсечений и с дополнительными расходами памяти
+*/
 int minimax_r(char cur_board[8][8][2],
               int flag, char color,
               int depth, int max_depth,
@@ -179,7 +195,9 @@ int minimax_r(char cur_board[8][8][2],
     }
 }
 
-
+/*
+    алгоритм минимакс с альфа/бета отсечениями
+*/
 int minimax_with_a_b(char cur_board[8][8][2],
                      int flag, char color,
                      int depth, int max_depth,
