@@ -9,72 +9,91 @@ int check_turn(char cur_board[8][8][2], int a1, int a2, int b1, int b2)
 {
     int x = b1 - a1, y = b2 - a2;
     char fig_t = cur_board[a2][a1][0], fig_c = cur_board[a2][a1][1];
-    if (is_on_board(cur_board, b1, b2) && cur_board[b2][b1][1]==fig_c) return 0;
+    if (is_on_board(cur_board, b1, b2) && cur_board[b2][b1][1]==fig_c)
+        return 0;
 
     if (fig_t=='p' && fig_c=='w'){
-        if (y==1 && x==0 && (!is_on_board(cur_board, b1, b2))) return 1;
-        if (y==2 && x==0 && a2==1 && (!is_on_board(cur_board, b1, b2)) && (!is_on_board(cur_board, b1, b2-1))) return 1;
-        if (y==1 && (x==1 || x==-1) && is_on_board(cur_board, b1, b2)) return 1;
+        if (y==1 && x==0 && (!is_on_board(cur_board, b1, b2)))
+            return 1;
+        if (y==2 && x==0 && a2==1 && (!is_on_board(cur_board, b1, b2)) && (!is_on_board(cur_board, b1, b2-1)))
+            return 1;
+        if (y==1 && (x==1 || x==-1) && is_on_board(cur_board, b1, b2))
+            return 1;
         /*if (y==1 && (x==1 || x==-1) && (!is_on_board(cur_board, b1, b2))) return 2;*/
     }
 
     if (fig_t=='p' && fig_c=='b'){
-        if (y==-1 && x==0 && (!is_on_board(cur_board, b1, b2))) return 1;
-        if (y==-2 && x==0 && a2==6 && (!is_on_board(cur_board, b1, b2)) && (!is_on_board(cur_board, b1, b2+1))) return 1;
-        if (y==-1 && (x==1 || x==-1) && is_on_board(cur_board, b1, b2)) return 1;
+        if (y==-1 && x==0 && (!is_on_board(cur_board, b1, b2)))
+            return 1;
+        if (y==-2 && x==0 && a2==6 && (!is_on_board(cur_board, b1, b2)) && (!is_on_board(cur_board, b1, b2+1)))
+            return 1;
+        if (y==-1 && (x==1 || x==-1) && is_on_board(cur_board, b1, b2))
+            return 1;
         /*if (y==1 && (x==1 || x==-1) && (!is_on_board(cur_board, b1, b2))) return 2;*/
     }
 
     if ((fig_t=='r' || fig_t=='q') && y==0){
         int flag = 1;
-        for (int i = min(a1, b1)+1; i<max(a1,b1); ++i) flag &= !(is_on_board(cur_board, i, a2));
+        for (int i = min(a1, b1)+1; i<max(a1,b1); ++i)
+            flag &= !(is_on_board(cur_board, i, a2));
         if (flag) return 1;
     }
     if ((fig_t=='r' || fig_t=='q') && x==0){
         int flag = 1;
-        for (int i = min(a2, b2)+1; i<max(a2,b2); ++i) flag &= !(is_on_board(cur_board, a1, i));
+        for (int i = min(a2, b2)+1; i<max(a2,b2); ++i)
+            flag &= !(is_on_board(cur_board, a1, i));
         if (flag) return 1;
     }
     if (fig_t=='b' || fig_t=='q'){
         if (x==y && x>0){
             int flag = 1;
-            for (int i = 1; i<x; ++i) flag &= !(is_on_board(cur_board, a1+i, a2+i));
+            for (int i = 1; i<x; ++i)
+                flag &= !(is_on_board(cur_board, a1+i, a2+i));
             if (flag) return 1;
         }
         if (x==y && x<0){
             int flag = 1;
-            for (int i = 1; i<-x; ++i) flag &= !(is_on_board(cur_board, a1-i, a2-i));
+            for (int i = 1; i<-x; ++i)
+                flag &= !(is_on_board(cur_board, a1-i, a2-i));
             if (flag) return 1;
         }
         if (x==-y && x>0){
             int flag = 1;
-            for (int i = 1; i<x; ++i) flag &= !(is_on_board(cur_board, a1+i, a2-i));
+            for (int i = 1; i<x; ++i)
+                flag &= !(is_on_board(cur_board, a1+i, a2-i));
             if (flag) return 1;
         }
         if (x==-y && x<0){
             int flag = 1;
-            for (int i = 1; i<-x; ++i) flag &= !(is_on_board(cur_board, a1-i, a2+i));
+            for (int i = 1; i<-x; ++i)
+                flag &= !(is_on_board(cur_board, a1-i, a2+i));
             if (flag) return 1;
         }
     }
 
     if (fig_t=='n'){
-        if ((abs(x)==2 && abs(y)==1) || (abs(x)==1 && abs(y)==2)) return 1;
+        if ((abs(x)==2 && abs(y)==1) || (abs(x)==1 && abs(y)==2))
+            return 1;
     }
     if (fig_t=='k'){
-        if (abs(x)<2 && abs(y)<2) return 1;
+        if (abs(x)<2 && abs(y)<2)
+            return 1;
         if (fig_c=='w' && abs(x)==2 && y==0 && a2==0 && a1==4){
             if (x>0 && !is_on_board(cur_board, 5, 0) && !is_on_board(cur_board, 6, 0))
-                if (cur_board[0][7][0]=='r' && cur_board[0][7][1]=='w') return 3;
+                if (cur_board[0][7][0]=='r' && cur_board[0][7][1]=='w')
+                    return 3;
             if (x<0 && !is_on_board(cur_board, 1, 0) && !is_on_board(cur_board, 2, 0) && !is_on_board(cur_board, 3, 0))
-                if (cur_board[0][0][0]=='r' && cur_board[0][0][1]=='w') return 3;
+                if (cur_board[0][0][0]=='r' && cur_board[0][0][1]=='w')
+                    return 3;
 
         }
         if (fig_c=='b' && abs(x)==2 && y==0 && a2==7 && a1==4){
             if (x>0 && !is_on_board(cur_board, 5, 7) && !is_on_board(cur_board, 6, 7))
-                if (cur_board[7][7][0]=='r' && cur_board[7][7][1]=='w') return 3;
+                if (cur_board[7][7][0]=='r' && cur_board[7][7][1]=='w')
+                    return 3;
             if (x<0 && !is_on_board(cur_board, 1, 7) && !is_on_board(cur_board, 2, 7) && !is_on_board(cur_board, 3, 7))
-                if (cur_board[7][0][0]=='r' && cur_board[7][0][1]=='w') return 3;
+                if (cur_board[7][0][0]=='r' && cur_board[7][0][1]=='w')
+                    return 3;
 
         }
     }
@@ -97,14 +116,22 @@ int check_checkmate(char cur_board[8][8][2], int x, int y, char color)
 vector_int_t get_king_turns(int x, int y) {
     vector_int_t king_turns;
     v_init(&king_turns);
-    if (x > 0 && y > 0) v_push(&king_turns, (x - 1)*10 + (y - 1));
-    if (x > 0 && y < 7) v_push(&king_turns, (x - 1)*10 + (y + 1));
-    if (x < 7 && y > 0) v_push(&king_turns, (x + 1)*10 + (y - 1));
-    if (x < 7 && y < 7) v_push(&king_turns, (x + 1)*10 + (y + 1));
-    if (x > 0) v_push(&king_turns, (x - 1)*10 + y);
-    if (x < 7) v_push(&king_turns, (x + 1)*10 + y);
-    if (y > 0) v_push(&king_turns, x*10 + (y - 1));
-    if (y < 7) v_push(&king_turns, x*10 + (y + 1));
+    if (x > 0 && y > 0)
+        v_push(&king_turns, (x - 1)*10 + (y - 1));
+    if (x > 0 && y < 7)
+        v_push(&king_turns, (x - 1)*10 + (y + 1));
+    if (x < 7 && y > 0)
+        v_push(&king_turns, (x + 1)*10 + (y - 1));
+    if (x < 7 && y < 7)
+        v_push(&king_turns, (x + 1)*10 + (y + 1));
+    if (x > 0)
+        v_push(&king_turns, (x - 1)*10 + y);
+    if (x < 7)
+        v_push(&king_turns, (x + 1)*10 + y);
+    if (y > 0)
+        v_push(&king_turns, x*10 + (y - 1));
+    if (y < 7)
+        v_push(&king_turns, x*10 + (y + 1));
     return king_turns;
 }
 
@@ -143,11 +170,13 @@ void write_turn(char cur_board[8][8][2], int a, int b)
 
 int add_turn(char cur_board[8][8][2], int a, int b, char cur_color)
 {
-    if (a<0 || b<0) return 0;
+    if (a<0 || b<0)
+        return 0;
     int a1 = a/10, a2 = a%10;
     int b1 = b/10, b2 = b%10;
     int x = b1 - a1;
-    if (a1 < 0 || a1 > 7 || a2 < 0 || a2 > 7 || b1 < 0 || b1 > 7 || b2 < 0 || b2 > 7) return 0;
+    if (a1 < 0 || a1 > 7 || a2 < 0 || a2 > 7 || b1 < 0 || b1 > 7 || b2 < 0 || b2 > 7)
+        return 0;
     if (!is_on_board(cur_board, a1, a2)) {
         return 0;
     }
@@ -168,7 +197,8 @@ int add_turn(char cur_board[8][8][2], int a, int b, char cur_color)
     } else {
         int kp = king_position(cur_board, color);
         if (check_checkmate(cur_board, kp/10, kp%10, color)){
-            char f1 = cur_board[b2][b1][0], f2 = cur_board[b2][b1][1];
+            char f1 = cur_board[b2][b1][0];
+            char f2 = cur_board[b2][b1][1];
             write_turn(cur_board, a, b);
             if (check_checkmate(cur_board, kp/10, kp%10, color)){
                 write_turn(cur_board, b, a);
@@ -294,7 +324,8 @@ int loss_q(char cur_board[8][8][2], char color)
             if (cur_board[i][j][1]==color)
                 for (int i1 = 0; i1<8; ++i1)
                     for (int j1 = 0; j1<8; ++j1)
-                        if (add_turn(c_board, 10*j+i, 10*j1+i1, color)) return 0;
+                        if (add_turn(c_board, 10*j+i, 10*j1+i1, color))
+                            return 0;
 
     return 1;
 }

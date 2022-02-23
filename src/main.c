@@ -6,8 +6,6 @@ HWND label, label2;
 
 HINSTANCE hInst;
 
-char color = 'w';
-
 vector_int_t possible_turns;
 
 
@@ -26,6 +24,7 @@ char board[8][8][2];
 int first_click = 0;
 int player_turn;
 int enemy_turn = -1;
+char color = 'w';
 
 void game_restart()
 {
@@ -38,7 +37,8 @@ int from_win_coord(int x, int y)
         for (int j = 0; j<8; ++j){
                 int x1 = 10+(box_len+1)*i;
                 int y1 = 10+(box_len+1)*j;
-                if ((x>x1) && (x<x1+(box_len+1)) && (y>y1) && (y<y1+(box_len+1))) return color=='w'? i*10+7-j : (7-i)*10+j;
+                if ((x>x1) && (x<x1+(box_len+1)) && (y>y1) && (y<y1+(box_len+1)))
+                    return color=='w'? i*10+7-j : (7-i)*10+j;
         }
     }
     return -1;
@@ -61,8 +61,10 @@ void draw_turn(int player_turn, HWND hwnd)
             SetWindowText(label2, "Your turn.");
         }
     }
-    if (loss_q(board, color)) SetWindowText(label, "You lose.");
-    if (loss_q(board, color=='w'?'b':'w')) SetWindowText(label, "You win.");
+    if (loss_q(board, color))
+        SetWindowText(label, "You lose.");
+    if (loss_q(board, color=='w'?'b':'w'))
+        SetWindowText(label, "You win.");
     draw_bitmaps(hwnd);
 }
 
@@ -92,23 +94,42 @@ void draw_bitmaps(HWND hwnd)
     HDC hMemDC = CreateCompatibleDC(hPaintDC);
     HGDIOBJ hOld;
     BITMAP bmp; HBITMAP hbmp;
+
     for (int i = 0; i<8; ++i)
         for (int j = 0; j<8; ++j){
             int i1 = color=='w'?7-i:i, j1 = color=='w'?j:7-j, temp, t = j1*10+i1;
             v_find(&possible_turns, j1*10+i1, temp);
-            int c = (board[player_turn%10][player_turn/10][1]==color && temp!=-1 || (first_click==1 && (t==player_turn)) || (enemy_turn!=-1 && (enemy_turn%100==t || enemy_turn/100==t)) ? 2 : (i%2+j%2)%2);
+
+            int c = (board[player_turn%10][player_turn/10][1]==color && temp!=-1 ||
+                     (first_click==1 && (t==player_turn)) ||
+                     (enemy_turn!=-1 && (enemy_turn%100==t ||
+                                         enemy_turn/100==t)) ? 2 : (i%2+j%2)%2);
             char *name = get_path(board[i1][j1][0], board[i1][j1][1], c);
-            hbmp = (HBITMAP)LoadImage(hInst, name, IMAGE_BITMAP, 0, 0, LR_LOADFROMFILE);
+            hbmp = (HBITMAP)LoadImage(hInst,
+                                      name,
+                                      IMAGE_BITMAP,
+                                      0, 0,
+                                      LR_LOADFROMFILE
+                                      );
             GetObject(hbmp, sizeof (BITMAP), &bmp);
             hOld = SelectObject(hMemDC, hbmp);
-            StretchBlt(hPaintDC, 10+(box_len+1)*j, 10+(box_len+1)*i, box_len, box_len, hMemDC, 0, 0, bmp.bmWidth, bmp.bmHeight, SRCCOPY);
+            StretchBlt(hPaintDC,
+                       10+(box_len+1)*j, 10+(box_len+1)*i,
+                       box_len, box_len, hMemDC,
+                       0, 0,
+                       bmp.bmWidth, bmp.bmHeight,
+                       SRCCOPY);
             SelectObject (hMemDC, hOld);
         }
     DeleteDC (hMemDC);
     EndPaint(hwnd, &ps);
 }
 
-LRESULT WINAPI DefWindProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam)
+LRESULT WINAPI DefWindProc(HWND hwnd,
+                           UINT message,
+                           WPARAM wparam,
+                           LPARAM lparam
+                           )
 {
     if (message == WM_DESTROY)
         PostQuitMessage(0);
@@ -132,7 +153,10 @@ LRESULT WINAPI DefWindProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam
             enemy_turn = -1;
             v_clear(&possible_turns);
             color = (color=='w'? 'b':'w');
-            SetWindowText(label, color=='w'? "You are playing white.":"You are playing black.");
+            SetWindowText(label,
+                          color=='w'?
+                          "You are playing white.":"You are playing black."
+                          );
             game_restart();
             if (color=='b'){
                 int bt = minimax(board, 'w', 2);
@@ -144,7 +168,10 @@ LRESULT WINAPI DefWindProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam
         if (bt_again == lparam) {
             v_clear(&possible_turns);
             enemy_turn = -1;
-            SetWindowText(label, color=='w'? "You are playing white.":"You are playing black.");
+            SetWindowText(label,
+                          color=='w'?
+                          "You are playing white.":"You are playing black."
+                          );
             game_restart();
             if (color=='b'){
                 int bt = minimax(board, 'w', 2);
@@ -159,7 +186,10 @@ LRESULT WINAPI DefWindProc(HWND hwnd, UINT message, WPARAM wparam, LPARAM lparam
     else return DefWindowProcA(hwnd, message, wparam, lparam);
 }
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int CmdShow)
+int WINAPI WinMain(HINSTANCE hInstance,
+                   HINSTANCE hPrevInstance,
+                   LPSTR lpCmdLine,
+                   int CmdShow)
 {
 
     WNDCLASSA w;
@@ -171,15 +201,49 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     RegisterClassA(&w);
 
     HWND hwnd;
-    hwnd = CreateWindow("Window", "Chess", WS_OVERLAPPEDWINDOW, 200, 100, win_len, win_height, NULL, NULL, hInstance, NULL);
+    hwnd = CreateWindow("Window",
+                        "Chess",
+                        WS_OVERLAPPEDWINDOW,
+                        200, 100,
+                        win_len, win_height,
+                        NULL, NULL, hInstance, NULL
+                        );
     ShowWindow(hwnd, SW_NORMAL);
     /*UpdateWindow(hwnd);*/
 
-    bt_color = CreateWindow("button", "Change color", WS_VISIBLE | WS_CHILD, win_len-200, win_height/2-25, 150, 50, hwnd, NULL, NULL, NULL);
-    bt_again = CreateWindow("button", "Play again", WS_VISIBLE | WS_CHILD, win_len-200, win_height/2+30, 150, 50, hwnd, NULL, NULL, NULL);
+    bt_color = CreateWindow("button",
+                            "Change color",
+                            WS_VISIBLE | WS_CHILD,
+                            win_len-200, win_height/2-25,
+                            150, 50,
+                            hwnd,
+                            NULL, NULL, NULL
+                            );
+    bt_again = CreateWindow("button",
+                            "Play again",
+                            WS_VISIBLE | WS_CHILD,
+                            win_len-200, win_height/2+30,
+                            150, 50,
+                            hwnd,
+                            NULL, NULL, NULL
+                            );
 
-    label = CreateWindow("static", "You are playing white.", WS_VISIBLE | WS_CHILD, win_len-200, win_height/2+85, 150, 50, hwnd, NULL, NULL, NULL);
-    label2 = CreateWindow("static", "Your turn.", WS_VISIBLE | WS_CHILD, win_len-200, win_height/2+140, 150, 50, hwnd, NULL, NULL, NULL);
+    label = CreateWindow("static",
+                         "You are playing white.",
+                         WS_VISIBLE | WS_CHILD,
+                         win_len-200, win_height/2+85,
+                         150, 50,
+                         hwnd,
+                         NULL, NULL, NULL
+                         );
+    label2 = CreateWindow("static",
+                          "Your turn.",
+                          WS_VISIBLE | WS_CHILD,
+                          win_len-200, win_height/2+140,
+                          150, 50,
+                          hwnd,
+                          NULL, NULL, NULL
+                          );
 
     v_init(&possible_turns);
     game_restart();

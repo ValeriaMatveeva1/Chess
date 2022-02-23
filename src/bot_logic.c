@@ -93,13 +93,17 @@ int evaluate_position(char cur_board[8][8][2], char color)
         for (int j = 0; j<8; ++j)
             if (cur_board[i][j][1]==color){
                 sum+=figure_value(cur_board[i][j][0]);
-                if (color=='w') sum+=position_bonus(cur_board, cur_board[i][j][0], j, i);
-                if (color=='b') sum+=position_bonus(cur_board, cur_board[i][j][0], 7-j, 7-i);
+                if (color=='w')
+                    sum+=position_bonus(cur_board, cur_board[i][j][0], j, i);
+                if (color=='b')
+                    sum+=position_bonus(cur_board, cur_board[i][j][0], 7-j, 7-i);
             }
             else if (cur_board[i][j][1]==enemy){
                 sum-=figure_value(cur_board[i][j][0]);
-                if (color=='w') sum-=position_bonus(cur_board, cur_board[i][j][0], j, i);
-                if (color=='b') sum-=position_bonus(cur_board, cur_board[i][j][0], 7-j, 7-i);
+                if (color=='w')
+                    sum-=position_bonus(cur_board, cur_board[i][j][0], j, i);
+                if (color=='b')
+                    sum-=position_bonus(cur_board, cur_board[i][j][0], 7-j, 7-i);
             }
     return sum;
 }
@@ -111,7 +115,10 @@ int minimax(char cur_board[8][8][2], char color, int depth)
     return res;
 }
 
-int minimax_r(char cur_board[8][8][2], int flag, char color, int depth, int max_depth, int *best)
+int minimax_r(char cur_board[8][8][2],
+              int flag, char color,
+              int depth, int max_depth,
+              int *best)
 {
     if (depth==0){
         int temp = evaluate_position(cur_board, color);
@@ -127,7 +134,11 @@ int minimax_r(char cur_board[8][8][2], int flag, char color, int depth, int max_
                         char temp_board[8][8][2];
                         copy_board(cur_board, temp_board);
                         write_turn(temp_board, 10*j+i, t.data[k]);
-                        int bq = minimax_r(temp_board, !flag, color=='w'?'b':'w', depth-1, max_depth, best);
+                        int bq = minimax_r(temp_board,
+                                           !flag, color=='w'?'b':'w',
+                                           depth-1, max_depth,
+                                           best
+                                           );
                         if (bq>best_move){
                             best_move = bq;
                             if (depth==max_depth) *best = 100*(10*j+i)+t.data[k];
@@ -149,7 +160,11 @@ int minimax_r(char cur_board[8][8][2], int flag, char color, int depth, int max_
                         char temp_board[8][8][2];
                         copy_board(cur_board, temp_board);
                         write_turn(temp_board, 10*j+i, t.data[k]);
-                        int bq = minimax_r(temp_board, !flag, color=='w'?'b':'w', depth-1, max_depth, best);
+                        int bq = minimax_r(temp_board,
+                                           !flag, color=='w'?'b':'w',
+                                           depth-1, max_depth,
+                                           best
+                                           );
                         if (bq<best_move){
                             best_move = bq;
                             if (depth==max_depth) *best = 100*(10*j+i)+t.data[k];
@@ -165,7 +180,11 @@ int minimax_r(char cur_board[8][8][2], int flag, char color, int depth, int max_
 }
 
 
-int minimax_with_a_b(char cur_board[8][8][2], int flag, char color, int depth, int max_depth, int *best, int alpha, int beta)
+int minimax_with_a_b(char cur_board[8][8][2],
+                     int flag, char color,
+                     int depth, int max_depth,
+                     int *best,
+                     int alpha, int beta)
 {
     if (depth==0){
         int temp = evaluate_position(cur_board, color);
@@ -182,7 +201,12 @@ int minimax_with_a_b(char cur_board[8][8][2], int flag, char color, int depth, i
                     char f11 = cur_board[i][j][0], f21 = cur_board[t_d%10][t_d/10][0];
                     char f12 = cur_board[i][j][1], f22 = cur_board[t_d%10][t_d/10][1];
                     write_turn(cur_board, 10*j+i, t_d);
-                    int bq = minimax_with_a_b(cur_board, !flag, color=='w'?'b':'w', depth-1, max_depth, best, alpha, beta);
+                    int bq = minimax_with_a_b(cur_board,
+                                              !flag, color=='w'?'b':'w',
+                                              depth-1, max_depth,
+                                              best,
+                                              alpha, beta
+                                              );
                     if ((bq>best_move)&&flag || (!flag)&&(bq<best_move)){
                         best_move = bq;
                         if (depth==max_depth) *best = 100*(10*j+i)+t_d;

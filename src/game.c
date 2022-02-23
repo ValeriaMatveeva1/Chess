@@ -49,7 +49,8 @@ void game(char color)
             print_board(board);
             int t = ask_turn();
             //system("cls");
-            if (add_turn(board, t/100, t%100, flag)) flag = (flag=='b' ? 'w':'b');
+            if (add_turn(board, t/100, t%100, flag))
+                flag = (flag=='b' ? 'w':'b');
         } else {
             //system("cls");
             write_bot_turn(board, flag);
