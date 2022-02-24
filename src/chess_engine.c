@@ -125,7 +125,7 @@ int check_checkmate(char cur_board[8][8][2], int x, int y, char color)
 {
     for (int i = 0; i < 8; i++) {
         for (int j = 0; j < 8; j++) {
-            if (is_on_board(cur_board, j, i) && cur_board[i][j][1] != color && check_turn(cur_board, j, i, x, y)) {
+            if (is_on_board(cur_board, j, i) && cur_board[i][j][1] != color && check_turn(cur_board, j, i, x, y)!=0) {
                 return 1;
             }
         }
@@ -188,7 +188,7 @@ int king_position(char cur_board[8][8][2], char color)
 }
 
 /*
-    здесь записывается ход в массив 
+    здесь записывается ход в массив
 */
 void write_turn(char cur_board[8][8][2], int a, int b)
 {
@@ -233,47 +233,45 @@ int add_turn(char cur_board[8][8][2], int a, int b, char cur_color)
         } else {
             return 1;
         }
+    }
+
+    int kp = king_position(cur_board, color);
+    char f1 = cur_board[b2][b1][0];
+    char f2 = cur_board[b2][b1][1];
+    write_turn(cur_board, a, b);
+    if (check_checkmate(cur_board, kp/10, kp%10, color)){
+        write_turn(cur_board, b, a);
+        cur_board[b2][b1][0] = f1;
+        cur_board[b2][b1][1] = f2;
+        return 0;
     } else {
-        int kp = king_position(cur_board, color);
-        if (check_checkmate(cur_board, kp/10, kp%10, color)){
-            char f1 = cur_board[b2][b1][0];
-            char f2 = cur_board[b2][b1][1];
-            write_turn(cur_board, a, b);
-            if (check_checkmate(cur_board, kp/10, kp%10, color)){
-                write_turn(cur_board, b, a);
-                cur_board[b2][b1][0] = f1;
-                cur_board[b2][b1][1] = f2;
-                return 0;
+        return 1;
+    }
+
+    if (turn==1){
+        write_turn(cur_board, a, b);
+    } else if (turn==2){
+        /*взятие на проходе*/
+    } else if (turn==3) {
+        if (color=='w'){
+            if (x>0){
+                a1 = 70;  a2 = 50;
             } else {
-                return 1;
+                a1 = 0; a2 = 30;
             }
         } else {
-            if (turn==1){
-                write_turn(cur_board, a, b);
-            } else if (turn==2){
-                /*взятие на проходе*/
-            } else if (turn==3) {
-                if (color=='w'){
-                    if (x>0){
-                        a1 = 70;  a2 = 50;
-                    } else {
-                        a1 = 0; a2 = 30;
-                    }
-                } else {
-                    if (x>0){
-                        a1 = 77; a2 = 57;
-                    } else {
-                        a1 = 7; a2 = 37;
-                    }
-                }
-                if (!check_checkmate(cur_board, b/10, b%10, color)) {
-                    write_turn(cur_board, a1, a2);
-                    write_turn(cur_board, a, b);
-                }
+            if (x>0){
+                a1 = 77; a2 = 57;
             } else {
-                return 0;
+                a1 = 7; a2 = 37;
             }
         }
+        if (!check_checkmate(cur_board, b/10, b%10, color)) {
+            write_turn(cur_board, a1, a2);
+            write_turn(cur_board, a, b);
+        }
+    } else {
+        return 0;
     }
     return 1;
 }
@@ -301,7 +299,7 @@ int from_str(char a[2])
 }
 
 /*
-    метод копирования доски 
+    метод копирования доски
 */
 void copy_board(const char board1[8][8][2], char board2[8][8][2])
 {
