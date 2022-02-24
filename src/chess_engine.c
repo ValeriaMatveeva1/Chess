@@ -230,6 +230,8 @@ int add_turn(char cur_board[8][8][2], int a, int b, char cur_color)
             cur_board[b2][b1][0] = f1;
             cur_board[b2][b1][1] = f2;
             return 0;
+        } else {
+            return 1;
         }
     } else {
         int kp = king_position(cur_board, color);
@@ -242,6 +244,8 @@ int add_turn(char cur_board[8][8][2], int a, int b, char cur_color)
                 cur_board[b2][b1][0] = f1;
                 cur_board[b2][b1][1] = f2;
                 return 0;
+            } else {
+                return 1;
             }
         } else {
             if (turn==1){
