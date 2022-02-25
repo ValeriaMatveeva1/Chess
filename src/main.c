@@ -103,7 +103,7 @@ void draw_bitmaps(HWND hwnd)
             int c = (board[player_turn%10][player_turn/10][1]==color && temp!=-1 ||
                      (first_click==1 && (t==player_turn)) ? 2 :
                      (enemy_turn!=-1 && (enemy_turn%100==t ||
-                                         enemy_turn/100==t)) ? 3 : (i%2+j%2)%2);
+                                         enemy_turn/100==t)) ? 3 : !((i%2+j%2)%2));
             char *name = get_path(board[i1][j1][0], board[i1][j1][1], c);
             hbmp = (HBITMAP)LoadImage(hInst,
                                       name,

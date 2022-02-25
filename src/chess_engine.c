@@ -106,10 +106,10 @@ int check_turn(char cur_board[8][8][2], int a1, int a2, int b1, int b2)
         }
         if (fig_c=='b' && abs(x)==2 && y==0 && a2==7 && a1==4){
             if (x>0 && !is_on_board(cur_board, 5, 7) && !is_on_board(cur_board, 6, 7))
-                if (cur_board[7][7][0]=='r' && cur_board[7][7][1]=='w')
+                if (cur_board[7][7][0]=='r' && cur_board[7][7][1]=='b')
                     return 3;
             if (x<0 && !is_on_board(cur_board, 1, 7) && !is_on_board(cur_board, 2, 7) && !is_on_board(cur_board, 3, 7))
-                if (cur_board[7][0][0]=='r' && cur_board[7][0][1]=='w')
+                if (cur_board[7][0][0]=='r' && cur_board[7][0][1]=='b')
                     return 3;
 
         }
@@ -244,12 +244,14 @@ int add_turn(char cur_board[8][8][2], int a, int b, char cur_color)
         cur_board[b2][b1][0] = f1;
         cur_board[b2][b1][1] = f2;
         return 0;
-    } else {
-        return 1;
     }
+        write_turn(cur_board, b, a);
+        cur_board[b2][b1][0] = f1;
+        cur_board[b2][b1][1] = f2;
 
     if (turn==1){
         write_turn(cur_board, a, b);
+        return 1;
     } else if (turn==2){
         /*взятие на проходе*/
     } else if (turn==3) {
@@ -269,11 +271,12 @@ int add_turn(char cur_board[8][8][2], int a, int b, char cur_color)
         if (!check_checkmate(cur_board, b/10, b%10, color)) {
             write_turn(cur_board, a1, a2);
             write_turn(cur_board, a, b);
+            return 1;
+        } else {
+            return 0;
         }
-    } else {
-        return 0;
     }
-    return 1;
+    return 0;
 }
 
 /*
