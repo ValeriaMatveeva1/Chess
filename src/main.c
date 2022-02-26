@@ -53,7 +53,7 @@ void draw_turn(int player_turn, HWND hwnd)
         draw_bitmaps(hwnd);
         int bt = minimax(board, color=='w'?'b':'w', 4);
         enemy_turn = bt;
-        write_turn(board, bt/100, bt%100);
+        add_turn(board, bt/100, bt%100, color=='w'?'b':'w');
         int kp = king_position(board, color);
         if (check_checkmate(board, kp/10, kp%10, color)){
             SetWindowText(label2, "Check.");
