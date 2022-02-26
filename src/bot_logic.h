@@ -4,6 +4,7 @@
 #include "chess_engine.h"
 #include <time.h>
 #include <stdlib.h>
+#include <limits.h>
 
 int position_bonus(char cur_board[8][8][2], char fig, int x, int y);
 int figure_value(char fig);

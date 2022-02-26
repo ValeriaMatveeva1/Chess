@@ -1,5 +1,8 @@
 #include "game.h"
 
+/*
+    доска, копируемая в текущую доску при старте игры
+*/
 const char start_board[8][8][2] = {
         {{'r','w'},{'n','w'},{'b','w'},{'q','w'},{'k','w'},{'b','w'},{'n','w'},{'r','w'}},
         {{'p','w'},{'p','w'},{'p','w'},{'p','w'},{'p','w'},{'p','w'},{'p','w'},{'p','w'}},
@@ -11,6 +14,9 @@ const char start_board[8][8][2] = {
         {{'r','b'},{'n','b'},{'b','b'},{'q','b'},{'k','b'},{'b','b'},{'n','b'},{'r','b'}}
 };
 
+/*
+    функция, спрашивающая цвет игрока
+*/
 char ask_color()
 {
     printf("Enter the color: ");
@@ -21,7 +27,9 @@ char ask_color()
     else printf("Invalid input.\n");
     return '\n';
 }
-
+/*
+    функция, спрашивающая ход игрока
+*/
 int ask_turn()
 {
     printf("Enter the turn: ");
@@ -31,12 +39,18 @@ int ask_turn()
     return 100*from_str(a)+from_str(b);
 }
 
+/*
+    функуия записи хода игрока и хода бота в массив
+*/
 void write_bot_turn(char cur_board[8][8][2], char color)
 {
     int bt = minimax(cur_board, color, 2);
     write_turn(cur_board, bt/100, bt%100);
 }
 
+/*
+    главная функция игры с бесконечным циклом, выбором цвета, вводом ходов
+*/
 void game(char color)
 {
     char flag = color;

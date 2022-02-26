@@ -41,3 +41,46 @@
 	<stdio.h>
 	<windows.h>
 
+1645906226 source:c:\lera\c and c++\chess\src\bot_logic.c
+	"bot_logic.h"
+
+1645907214 c:\lera\c and c++\chess\src\bot_logic.h
+	"chess_engine.h"
+	<time.h>
+	<stdlib.h>
+	<limits.h>
+
+1645527062 c:\lera\c and c++\chess\src\chess_engine.h
+	"vector.h"
+	<stdio.h>
+	<stdlib.h>
+
+1645641414 c:\lera\c and c++\chess\src\vector.h
+	<stdlib.h>
+	<string.h>
+
+1645906226 source:c:\lera\c and c++\chess\src\chess_engine.c
+	"chess_engine.h"
+
+1645707686 source:c:\lera\c and c++\chess\src\game.c
+	"game.h"
+
+1645439926 c:\lera\c and c++\chess\src\game.h
+	"chess_engine.h"
+	"bot_logic.h"
+	<stdlib.h>
+
+1645906226 source:c:\lera\c and c++\chess\src\main.c
+	"main.h"
+
+1645637745 c:\lera\c and c++\chess\src\main.h
+	"chess_engine.h"
+	"bot_logic.h"
+	<stdlib.h>
+	<stdio.h>
+	<windows.h>
+
+1645707686 source:c:\lera\c and c++\chess\src\vector.c
+	<stdio.h>
+	"vector.h"
+
