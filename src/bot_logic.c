@@ -164,6 +164,7 @@ int minimax_r(char cur_board[8][8][2],
                             if (r) *best = 100*(10*j+i)+t.data[k];
                         }
                     }
+                    v_clear(&t);
                 }
         return best_move;
     } else {
@@ -190,6 +191,7 @@ int minimax_r(char cur_board[8][8][2],
                             if (r) *best = 100*(10*j+i)+t.data[k];
                         }
                     }
+                    v_clear(&t);
                 }
         return best_move;
     }
@@ -253,6 +255,7 @@ int minimax_with_a_b(char cur_board[8][8][2],
                         beta = beta<bq? beta: bq;
                     }
                 }
+                v_clear(&t);
             }
         return best_move;
 }

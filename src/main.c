@@ -105,6 +105,7 @@ void draw_bitmaps(HWND hwnd)
                      (enemy_turn!=-1 && (enemy_turn%100==t ||
                                          enemy_turn/100==t)) ? 3 : !((i%2+j%2)%2));
             char *name = get_path(board[i1][j1][0], board[i1][j1][1], c);
+            free(name);
             hbmp = (HBITMAP)LoadImage(hInst,
                                       name,
                                       IMAGE_BITMAP,
@@ -254,5 +255,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
+    v_clear(&possible_turns);
     return 0;
 }
