@@ -26,18 +26,18 @@ versions - версии игры (последовательно улучшен�
 
 Version 1
 
-![alt text](https://github.com/ValeriaMatveeva1/Chess/blob/master/examples/v1.png)
+![alt text](https://github.com/ValeriaMatveeva1/chess/blob/main/examples/v1.png)
 
 Version 2
 
-![alt text](https://github.com/ValeriaMatveeva1/Chess/blob/master/examples/v2.png)
+![alt text](https://github.com/ValeriaMatveeva1/chess/blob/main/examples/v2.png)
 
 Version 3
 
-![alt text](https://github.com/ValeriaMatveeva1/Chess/blob/master/examples/v3.png)
+![alt text](https://github.com/ValeriaMatveeva1/chess/blob/main/examples/v3.png)
 
 ## Примеры работы
 Здесь приведн короткий пример, когда бот ставит глупый мат игроку.
 
-![image](https://github.com/ValeriaMatveeva1/Chess/blob/master/examples/gg.gif)
+![image](https://github.com/ValeriaMatveeva1/chess/blob/main/examples/gg.gif)
 
