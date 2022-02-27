@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1645439926 source:d:\programming\c++\c\chess\src\vector.c
+1645914066 source:d:\programming\c++\c\chess\src\vector.c
 	<stdio.h>
 	"vector.h"
 
@@ -7,23 +7,24 @@
 	<stdlib.h>
 	<string.h>
 
-1645892517 source:d:\programming\c++\c\chess\src\bot_logic.c
+1645951424 source:d:\programming\c++\c\chess\src\bot_logic.c
 	"bot_logic.h"
 
-1645527008 d:\programming\c++\c\chess\src\bot_logic.h
+1645907345 d:\programming\c++\c\chess\src\bot_logic.h
 	"chess_engine.h"
 	<time.h>
 	<stdlib.h>
+	<limits.h>
 
 1645527062 d:\programming\c++\c\chess\src\chess_engine.h
 	"vector.h"
 	<stdio.h>
 	<stdlib.h>
 
-1645894109 source:d:\programming\c++\c\chess\src\chess_engine.c
+1645912692 source:d:\programming\c++\c\chess\src\chess_engine.c
 	"chess_engine.h"
 
-1645641681 source:d:\programming\c++\c\chess\src\game.c
+1645914074 source:d:\programming\c++\c\chess\src\game.c
 	"game.h"
 
 1645439926 d:\programming\c++\c\chess\src\game.h
@@ -31,7 +32,7 @@
 	"bot_logic.h"
 	<stdlib.h>
 
-1645892649 source:d:\programming\c++\c\chess\src\main.c
+1645913986 source:d:\programming\c++\c\chess\src\main.c
 	"main.h"
 
 1645624887 d:\programming\c++\c\chess\src\main.h

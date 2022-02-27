@@ -125,6 +125,33 @@ int minimax(char cur_board[8][8][2], char color, int depth)
 {
     int res = -1;
     minimax_with_a_b(cur_board, 1, color, depth, depth, &res, INT_MIN, INT_MAX);
+
+    int roque = check_turn(cur_board, (res/100)/10, (res/100)%10, (res%100)/10, (res%100)%10)==3;
+    char f11 = cur_board[(res/100)%10][(res/100)/10][0], f21 = cur_board[(res%100)%10][(res%100)/10][0];
+    char f12 = cur_board[(res/100)%10][(res/100)/10][1], f22 = cur_board[(res%100)%10][(res%100)/10][1];
+    int flag = add_turn(cur_board, res/100, res%100, color);
+    cur_board[(res/100)%10][(res/100)/10][0] = f11;
+    cur_board[(res/100)%10][(res/100)/10][1] = f12;
+    cur_board[(res%100)%10][(res%100)/10][0] = f21;
+    cur_board[(res%100)%10][(res%100)/10][1] = f22;
+    if (roque){
+        int r = find_rock(cur_board, color, (res%100)/10-(res/100)/10);
+        int r1 = r/100, r2 = r%100;
+        cur_board[r1%10][r1/10][0] = '0';
+        cur_board[r1%10][r1/10][1] = '0';
+        cur_board[r2%10][r2/10][0] = 'r';
+        cur_board[r2%10][r2/10][1] = color;
+    }
+
+    if (res==-1 || !flag){
+        for (int i = 0; i<8; ++i)
+            for (int j = 0; j<8; ++j)
+                if (cur_board[i][j][1]==color){
+                    vector_int_t t = turns(cur_board, 10*j+i);
+                    if (t.len>0) res = 100*(10*j+i)+t.data[0];
+                    v_clear(&t);
+                }
+    }
     return res;
 }
 
@@ -149,7 +176,7 @@ int minimax_r(char cur_board[8][8][2],
                     for (int k = 0; k<t.len; ++k){
                         char temp_board[8][8][2];
                         copy_board(cur_board, temp_board);
-                        write_turn(temp_board, 10*j+i, t.data[k]);
+                        add_turn(temp_board, 10*j+i, t.data[k], color);
                         int bq = minimax_r(temp_board,
                                            !flag, color=='w'?'b':'w',
                                            depth-1, max_depth,
@@ -176,7 +203,7 @@ int minimax_r(char cur_board[8][8][2],
                     for (int k = 0; k<t.len; ++k){
                         char temp_board[8][8][2];
                         copy_board(cur_board, temp_board);
-                        write_turn(temp_board, 10*j+i, t.data[k]);
+                        add_turn(temp_board, 10*j+i, t.data[k], color);
                         int bq = minimax_r(temp_board,
                                            !flag, color=='w'?'b':'w',
                                            depth-1, max_depth,
@@ -220,7 +247,7 @@ int minimax_with_a_b(char cur_board[8][8][2],
                     int roque = check_turn(cur_board, j, i, t_d/10, t_d%10)==3;
                     char f11 = cur_board[i][j][0], f21 = cur_board[t_d%10][t_d/10][0];
                     char f12 = cur_board[i][j][1], f22 = cur_board[t_d%10][t_d/10][1];
-                    write_turn(cur_board, 10*j+i, t_d);
+                    add_turn(cur_board, 10*j+i, t_d, color);
                     int bq = minimax_with_a_b(cur_board,
                                               !flag, color=='w'?'b':'w',
                                               depth-1, max_depth,

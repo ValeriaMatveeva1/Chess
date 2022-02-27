@@ -24,6 +24,8 @@ int is_on_board(char cur_board[8][8][2], int x, int y)
 */
 int check_turn(char cur_board[8][8][2], int a1, int a2, int b1, int b2)
 {
+    if (a1 < 0 || a1 > 7 || a2 < 0 || a2 > 7 || b1 < 0 || b1 > 7 || b2 < 0 || b2 > 7)
+        return 0;
     int x = b1 - a1, y = b2 - a2;
     char fig_t = cur_board[a2][a1][0], fig_c = cur_board[a2][a1][1];
     if (is_on_board(cur_board, b1, b2) && cur_board[b2][b1][1]==fig_c)
