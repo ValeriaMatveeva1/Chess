@@ -59,7 +59,7 @@
 	<stdlib.h>
 	<string.h>
 
-1645906226 source:c:\lera\c and c++\chess\src\chess_engine.c
+1645916545 source:c:\lera\c and c++\chess\src\chess_engine.c
 	"chess_engine.h"
 
 1645707686 source:c:\lera\c and c++\chess\src\game.c
@@ -70,7 +70,7 @@
 	"bot_logic.h"
 	<stdlib.h>
 
-1645906226 source:c:\lera\c and c++\chess\src\main.c
+1645916545 source:c:\lera\c and c++\chess\src\main.c
 	"main.h"
 
 1645637745 c:\lera\c and c++\chess\src\main.h
