@@ -4,8 +4,6 @@ HWND bt_color;
 HWND bt_again;
 HWND label, label2;
 
-HINSTANCE hInst;
-
 vector_int_t possible_turns;
 
 
@@ -25,6 +23,7 @@ int first_click = 0;
 int player_turn;
 int enemy_turn = -1;
 char color = 'w';
+const int depth = 4;
 
 void game_restart()
 {
@@ -47,11 +46,11 @@ int from_win_coord(int x, int y)
 void draw_turn(int player_turn, HWND hwnd)
 {
     int a = player_turn/100, b = player_turn%100;
-    if (player_turn==-100-1) return;
+    if (player_turn<0) return;
     if (add_turn(board, player_turn/100, player_turn%100, color)) {
         SetWindowText(label2, "Bot turn.");
         draw_bitmaps(hwnd);
-        int bt = minimax(board, color=='w'?'b':'w', 4);
+        int bt = minimax(board, color=='w'?'b':'w', depth);
         enemy_turn = bt;
         add_turn(board, bt/100, bt%100, color=='w'?'b':'w');
         int kp = king_position(board, color);
@@ -106,7 +105,7 @@ void draw_bitmaps(HWND hwnd)
                                          enemy_turn/100==t)) ? 3 : !((i%2+j%2)%2));
             char *name = get_path(board[i1][j1][0], board[i1][j1][1], c);
             free(name);
-            hbmp = (HBITMAP)LoadImage(hInst,
+            hbmp = (HBITMAP)LoadImage(NULL,
                                       name,
                                       IMAGE_BITMAP,
                                       0, 0,
@@ -121,6 +120,7 @@ void draw_bitmaps(HWND hwnd)
                        bmp.bmWidth, bmp.bmHeight,
                        SRCCOPY);
             SelectObject (hMemDC, hOld);
+            DeleteObject(hbmp);
         }
     DeleteDC (hMemDC);
     EndPaint(hwnd, &ps);
@@ -140,7 +140,7 @@ LRESULT WINAPI DefWindProc(HWND hwnd,
         if (first_click==0){
             player_turn = from_win_coord(x, y);
             first_click = 1;
-            possible_turns = turns(board, player_turn);
+            if (player_turn>=0) possible_turns = turns(board, player_turn);
             draw_bitmaps(hwnd);
         } else {
             v_init(&possible_turns);
@@ -160,7 +160,7 @@ LRESULT WINAPI DefWindProc(HWND hwnd,
                           );
             game_restart();
             if (color=='b'){
-                int bt = minimax(board, 'w', 2);
+                int bt = minimax(board, 'w', depth);
                 enemy_turn = bt;
                 write_turn(board, bt/100, bt%100);
             }
@@ -175,7 +175,7 @@ LRESULT WINAPI DefWindProc(HWND hwnd,
                           );
             game_restart();
             if (color=='b'){
-                int bt = minimax(board, 'w', 2);
+                int bt = minimax(board, 'w', depth);
                 enemy_turn = bt;
                 write_turn(board, bt/100, bt%100);
             }
@@ -196,7 +196,6 @@ int WINAPI WinMain(HINSTANCE hInstance,
     WNDCLASSA w;
     memset(&w, 0, sizeof(WNDCLASSA));
     w.hInstance = hInstance;
-    hInst = hInstance;
     w.lpszClassName = "Window";
     w.lpfnWndProc = DefWindProc;
     RegisterClassA(&w);
