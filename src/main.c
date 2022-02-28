@@ -1,12 +1,19 @@
 #include "main.h"
 
-HWND bt_color;
+/*
+    глобальные переменные: кнопки и надписи
+*/
+HWND bt_color; 
 HWND bt_again;
 HWND label, label2;
 
+HINSTANCE hInst;
+
 vector_int_t possible_turns;
 
-
+/*
+    доска, копируемая в текущую доску при старте игры
+*/
 const char new_board[8][8][2] = {
         {{'r','w'},{'n','w'},{'b','w'},{'q','w'},{'k','w'},{'b','w'},{'n','w'},{'r','w'}},
         {{'p','w'},{'p','w'},{'p','w'},{'p','w'},{'p','w'},{'p','w'},{'p','w'},{'p','w'}},
@@ -23,13 +30,19 @@ int first_click = 0;
 int player_turn;
 int enemy_turn = -1;
 char color = 'w';
-const int depth = 4;
 
+/*
+    метод перерисовки доски в начальное состояние ("начать игру заново")
+*/
 void game_restart()
 {
     copy_board(new_board, board);
 }
 
+/*
+    функция получения координат на доске из координат в окне 
+    (перевод из пиксельных координат в координаты из отрезка [0,7])
+*/
 int from_win_coord(int x, int y)
 {
     for (int i = 0; i<8; ++i){
@@ -43,16 +56,20 @@ int from_win_coord(int x, int y)
     return -1;
 }
 
+/*
+    метод добавления ходов (игрока и бота-противникаа) в переменную board
+    и изменений надписей в окошке в зависимости от игровоц ситуации
+*/
 void draw_turn(int player_turn, HWND hwnd)
 {
     int a = player_turn/100, b = player_turn%100;
-    if (player_turn<0) return;
+    if (player_turn==-100-1) return;
     if (add_turn(board, player_turn/100, player_turn%100, color)) {
         SetWindowText(label2, "Bot turn.");
         draw_bitmaps(hwnd);
-        int bt = minimax(board, color=='w'?'b':'w', depth);
+        int bt = minimax(board, color=='w'?'b':'w', 4);
         enemy_turn = bt;
-        add_turn(board, bt/100, bt%100, color=='w'?'b':'w');
+        write_turn(board, bt/100, bt%100);
         int kp = king_position(board, color);
         if (check_checkmate(board, kp/10, kp%10, color)){
             SetWindowText(label2, "Check.");
@@ -67,6 +84,9 @@ void draw_turn(int player_turn, HWND hwnd)
     draw_bitmaps(hwnd);
 }
 
+/*
+    функция получения пути к картинке
+*/
 char *get_path(char a1, char a2, int flag)
 {
     char *way = "src\\assets\\";
@@ -85,6 +105,9 @@ char *get_path(char a1, char a2, int flag)
     return res;
 }
 
+/*
+    метод прорисовки ходов
+*/
 void draw_bitmaps(HWND hwnd)
 {
     InvalidateRect(hwnd, NULL, TRUE);
@@ -105,7 +128,7 @@ void draw_bitmaps(HWND hwnd)
                                          enemy_turn/100==t)) ? 3 : !((i%2+j%2)%2));
             char *name = get_path(board[i1][j1][0], board[i1][j1][1], c);
             free(name);
-            hbmp = (HBITMAP)LoadImage(NULL,
+            hbmp = (HBITMAP)LoadImage(hInst,
                                       name,
                                       IMAGE_BITMAP,
                                       0, 0,
@@ -120,12 +143,14 @@ void draw_bitmaps(HWND hwnd)
                        bmp.bmWidth, bmp.bmHeight,
                        SRCCOPY);
             SelectObject (hMemDC, hOld);
-            DeleteObject(hbmp);
         }
     DeleteDC (hMemDC);
     EndPaint(hwnd, &ps);
 }
 
+/*
+    функция обработки сообщений для окна от Windows (используется далее, как одно из полей класса окна)
+*/
 LRESULT WINAPI DefWindProc(HWND hwnd,
                            UINT message,
                            WPARAM wparam,
@@ -140,7 +165,7 @@ LRESULT WINAPI DefWindProc(HWND hwnd,
         if (first_click==0){
             player_turn = from_win_coord(x, y);
             first_click = 1;
-            if (player_turn>=0) possible_turns = turns(board, player_turn);
+            possible_turns = turns(board, player_turn);
             draw_bitmaps(hwnd);
         } else {
             v_init(&possible_turns);
@@ -160,7 +185,7 @@ LRESULT WINAPI DefWindProc(HWND hwnd,
                           );
             game_restart();
             if (color=='b'){
-                int bt = minimax(board, 'w', depth);
+                int bt = minimax(board, 'w', 2);
                 enemy_turn = bt;
                 write_turn(board, bt/100, bt%100);
             }
@@ -175,7 +200,7 @@ LRESULT WINAPI DefWindProc(HWND hwnd,
                           );
             game_restart();
             if (color=='b'){
-                int bt = minimax(board, 'w', depth);
+                int bt = minimax(board, 'w', 2);
                 enemy_turn = bt;
                 write_turn(board, bt/100, bt%100);
             }
@@ -187,6 +212,11 @@ LRESULT WINAPI DefWindProc(HWND hwnd,
     else return DefWindowProcA(hwnd, message, wparam, lparam);
 }
 
+
+/*
+    WinMain (функция точки входа, основная управляющая функция): инициализирует программу, отображает на экране основное окно и
+    входит в распределяющий цикл сообщений, который является управляющей структурой верхнего уровня для остальных элементов выполнения программы
+*/
 int WINAPI WinMain(HINSTANCE hInstance,
                    HINSTANCE hPrevInstance,
                    LPSTR lpCmdLine,
@@ -196,6 +226,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
     WNDCLASSA w;
     memset(&w, 0, sizeof(WNDCLASSA));
     w.hInstance = hInstance;
+    hInst = hInstance;
     w.lpszClassName = "Window";
     w.lpfnWndProc = DefWindProc;
     RegisterClassA(&w);
